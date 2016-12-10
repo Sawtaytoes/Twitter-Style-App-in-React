@@ -12,8 +12,9 @@ let nextUserId = 1
 
 //- Functions
 
-const findUserByName = (lookupName = '') => {
-	return users.find(({ name }) => name === lookupName.toLowerCase())
+const findUserByUsername = (value = '') => {
+	const lookupValue = value.toLowerCase()
+	return users.find(({ username }) => username === lookupValue)
 }
 
 
@@ -23,7 +24,7 @@ const registerUser = ({ body }, res) => {
 	let response
 	const { username, password } = body
 
-	if (findUserByName(username)) {
+	if (findUserByUsername(username)) {
 		response = {
 			error: true,
 			message: "User already exists with that name.",
@@ -52,7 +53,7 @@ const registerUser = ({ body }, res) => {
 			joinDate: new Date(),
 		})
 		nextUserId += 1
-
+		console.log(findUserByUsername(username));
 		response = {
 			message: "You've been successfully registered."
 		}
@@ -66,7 +67,7 @@ const registerUser = ({ body }, res) => {
 const loginUser = ({ body }, res) => {
 	let response
 
-	const { id } = findUserByName(body.username) || {}
+	const { id } = findUserByUsername(body.username) || {}
 	if (id) {
 		response = { userId: id }
 
