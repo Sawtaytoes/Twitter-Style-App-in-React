@@ -112,14 +112,12 @@ app
 		}
 
 	} else if (!username) {
-		console.log('username', username)
 		response = {
 			error: true,
 			message: "You must enter in a valid username.",
 		}
 
 	} else if (!password) {
-		console.log('password', password)
 		response = {
 			error: true,
 			message: "You must enter in a valid password.",
