@@ -17,8 +17,8 @@ export const login = ({ error, message, userId }, { username }) => {
 		type: LOGIN,
 		error,
 		message,
-		userId,
 		username,
+		userId: Number(userId),
 	}
 }
 
@@ -57,9 +57,11 @@ export default (state = {}, action) => {
 		}
 
 	case LOGIN: {
+		const isAuthenticated = !error
 		return {
 			...state,
 			error,
+			isAuthenticated,
 			message,
 			userId,
 			username,
@@ -69,6 +71,9 @@ export default (state = {}, action) => {
 	case LOGOUT: {
 		return {
 			...state,
+			error: undefined,
+			isAuthenticated: false,
+			message: undefined,
 			userId: undefined,
 			username: undefined,
 		}

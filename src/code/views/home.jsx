@@ -1,6 +1,6 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { Match, Link } from 'react-router'
+import { Match, Redirect, Link } from 'react-router'
 
 // Components
 import Login from 'components/login'
@@ -24,47 +24,56 @@ const submissionHandler = (url, options) => fields => {
 		.catch(err => console.error(err))
 }
 
+const Test = props => {
+	console.debug('props', props.isAuthenticated)
+	return <div />
+}
+
+Test.propTypes = { isAuthenticated: PropTypes.bool }
+
 class Home extends PureComponent {
 	handleLogout() {
 		const { dispatch } = this.props
 		dispatch(logout())
 	}
 
-	render() { return (
-		<div>
-			<h1>Hello World</h1>
-			<p>
-				Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.
-			</p>
+	render() {
+		const { isAuthenticated, userId, username } = this.props
+		return (
+			<div>
+				<nav>
+					<ul>
+						<li><Link to="/login" title="Login">Login</Link></li>
+						<li><Link to="/sign-up" title="Sign-Up">Sign-Up</Link></li>
+					</ul>
+				</nav>
 
-			<nav>
-				<ul>
-					<li><Link to="/login" title="Login">Login</Link></li>
-					<li><Link to="/sign-up" title="Sign-Up">Sign-Up</Link></li>
-				</ul>
-			</nav>
+				<p><a href="javascript:" onClick={this.handleLogout.bind(this)}>LOGOUT</a></p>
 
-			<p><a href="javascript:" onClick={this.handleLogout.bind(this)}>LOGOUT</a></p>
+				<Match pattern="/login" render={() => <Test {...this.props} />} />
 
-			<Match pattern="/login" render={() => <Login
-				title="Login"
-				submit={submissionHandler('/api/login', { method: 'POST' })}
-				action={login}
-			/>} />
-			<Match pattern="/sign-up" render={() => <Login
-				title="Sign-Up"
-				submit={submissionHandler('/api/user', { method: 'POST' })}
-				action={login}
-			/>} />
-			<Match pattern="/tweets" render={() => <Login
-				title="Sign-Up"
-				submit={submissionHandler('/api/user', { method: 'POST' })}
-				action={login}
-			/>} />
-		</div>
-	)}
+				<Match pattern="/login" render={() => isAuthenticated ? <Redirect to="/profile" /> : <Login
+					title="Login"
+					submit={submissionHandler('/api/login', { method: 'POST' })}
+					action={login}
+				/>} />
+				<Match pattern="/sign-up" render={() => isAuthenticated ? <Redirect to="/profile" /> : <Login
+					title="Sign-Up"
+					submit={submissionHandler('/api/user', { method: 'POST' })}
+					action={login}
+				/>} />
+				<Match pattern="/profile" render={() => !isAuthenticated ? <Redirect to="/login" /> : <div>
+					<h1>Profile</h1>
+					<p>UserId: {userId}</p>
+					<p>Username: {username}</p>
+				</div>} />
+			</div>
+		)
+	}
 }
 
 export default connect(({ accountManagement }) => ({
+	isAuthenticated: accountManagement.isAuthenticated,
 	userId: accountManagement.userId,
+	username: accountManagement.username,
 }))(stylesLoader.render(Home))
