@@ -131,10 +131,11 @@ app
 			password: password,
 			joinDate: new Date(),
 		})
-		nextUserId += 1
 		response = {
-			message: "You've been registered successfully."
+			userId: nextUserId,
+			message: "You've been registered successfully.",
 		}
+		nextUserId += 1
 	}
 
 	console.log(response)
