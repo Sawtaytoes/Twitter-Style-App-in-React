@@ -59,10 +59,47 @@ app
 
 .get('/private/reset-users', (req, res) => {
 	resetUsers()
-	res.send()
+	res.send({ message: "Successfully reset all users." })
 })
 
-.post('/api/register', ({ body }, res) => {
+.post('/api/login', ({ body }, res) => {
+	console.log('-- User Login --')
+
+	let response
+	const { username, password } = body
+
+	if (!username) {
+			console.log('username', username)
+			response = {
+				error: true,
+				message: "You must enter in a valid username.",
+			}
+
+	} else if (!password) {
+		console.log('password', password)
+		response = {
+			error: true,
+			message: "You must enter in a valid password.",
+		}
+
+	} else {
+		const { id } = getUserInfo(username, password) || {}
+		if (typeof id === 'number') {
+			response = { userId: id }
+
+		} else {
+			response = {
+				error: true,
+				message: "Login failed for that username and password combination.",
+			}
+		}
+	}
+
+	console.log(response)
+	res.send(response)
+})
+
+.post('/api/user', ({ body }, res) => {
 	console.log('-- User Registration --')
 
 	let response
@@ -100,43 +137,6 @@ app
 		console.log(findUserByUsername(username));
 		response = {
 			message: "You've been successfully registered."
-		}
-	}
-
-	console.log(response)
-	res.send(response)
-})
-
-.post('/api/login', ({ body }, res) => {
-	console.log('-- User Login --')
-
-	let response
-	const { username, password } = body
-
-	if (!username) {
-			console.log('username', username)
-			response = {
-				error: true,
-				message: "You must enter in a valid username.",
-			}
-
-	} else if (!password) {
-		console.log('password', password)
-		response = {
-			error: true,
-			message: "You must enter in a valid password.",
-		}
-
-	} else {
-		const { id } = getUserInfo(username, password) || {}
-		if (typeof id === 'number') {
-			response = { userId: id }
-
-		} else {
-			response = {
-				error: true,
-				message: "Login failed for that username and password combination.",
-			}
 		}
 	}
 

@@ -31,7 +31,7 @@ const getUserId = t => responseWrapper(({ userId }) => (
 //- Registration
 
 test('Registration: No Data', t => {
-	fetch(`${urlRoot}register`, Object.assign({}, request))
+	fetch(`${urlRoot}user`, Object.assign({}, request))
 	.then(res => res.json())
 	.then(shouldError(t))
 	.catch(err => t.error(err))
@@ -40,7 +40,7 @@ test('Registration: No Data', t => {
 
 test('Registration: Username Only', t => {
 	const body = JSON.stringify({ username })
-	fetch(`${urlRoot}register`, Object.assign({}, request, { body }))
+	fetch(`${urlRoot}user`, Object.assign({}, request, { body }))
 	.then(res => res.json())
 	.then(shouldError(t))
 	.catch(err => t.error(err))
@@ -49,7 +49,7 @@ test('Registration: Username Only', t => {
 
 test('Registration: Password Only', t => {
 	const body = JSON.stringify({ password })
-	fetch(`${urlRoot}register`, Object.assign({}, request, { body }))
+	fetch(`${urlRoot}user`, Object.assign({}, request, { body }))
 	.then(res => res.json())
 	.then(shouldError(t))
 	.catch(err => t.error(err))
@@ -58,7 +58,7 @@ test('Registration: Password Only', t => {
 
 test('Registration: Username and Blank Password', t => {
 	const body = JSON.stringify({ username, password: '' })
-	fetch(`${urlRoot}register`, Object.assign({}, request, { body }))
+	fetch(`${urlRoot}user`, Object.assign({}, request, { body }))
 	.then(res => res.json())
 	.then(shouldError(t))
 	.catch(err => t.error(err))
@@ -67,7 +67,7 @@ test('Registration: Username and Blank Password', t => {
 
 test('Registration: Username and Password', t => {
 	const body = JSON.stringify({ username, password })
-	fetch(`${urlRoot}register`, Object.assign({}, request, { body }))
+	fetch(`${urlRoot}user`, Object.assign({}, request, { body }))
 	.then(res => res.json())
 	.then(shouldNotError(t))
 	.catch(err => t.error(err))
