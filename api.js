@@ -89,14 +89,12 @@ app
 	const { username, password } = body
 
 	if (!username) {
-			logger('username', username)
 			response = {
 				error: true,
 				message: "You must enter in a valid username.",
 			}
 
 	} else if (!password) {
-		logger('password', password)
 		response = {
 			error: true,
 			message: "You must enter in a valid password.",

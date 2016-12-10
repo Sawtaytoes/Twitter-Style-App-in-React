@@ -15,8 +15,7 @@ const request = { headers: { 'Content-Type': 'application/json' } }
 const userId = 0
 const displayName = 'Samuel'
 const username = `fakeUsername${Math.random()}`
-const password = 'faePassword'
-console.log(username);
+const password = 'fakePassword'
 
 const responseWrapper = func => response => {
 	func(response || {})
