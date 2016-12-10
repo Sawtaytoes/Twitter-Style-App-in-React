@@ -1,4 +1,4 @@
-# Ghadyani Framework for Webpack, React, and Redux
+# Twitter Style App in React
 
 ## Prerequisites
 
@@ -8,17 +8,7 @@
 - [npm](https://docs.npmjs.com/) (3.7.2 or higher)
 - [Visual Studio](https://www.microsoft.com/en-us/download/details.aspx?id=48131) (2013 only) `Windows only`
 
-### Optional
-- [MailDev](http://danfarrelly.nyc/MailDev/) `Local Mail Server for Testing Email`
-
-
 ## Setup
-
-### Assets
-```shell
-npm config set msvs_version 2013 --global # Windows requires VS2013 installed
-npm i
-```
 
 ### Configuration Customization
 
