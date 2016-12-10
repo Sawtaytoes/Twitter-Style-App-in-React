@@ -104,9 +104,11 @@ Start the local catch-all SMTP server using the command `maildev`.
 ### Development: Local
 ```shell
 npm start
+npm run api
 ```
 
 OR
+
 ```shell
 bash local.sh
 ```
@@ -115,6 +117,7 @@ OR
 
 ```shell
 node index.js
+node api.js
 ```
 
 ### Production: Hosted VPS
