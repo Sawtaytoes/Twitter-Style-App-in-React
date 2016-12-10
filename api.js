@@ -12,15 +12,42 @@ let nextUserId = 1
 
 //- Functions
 
-const findUserByUsername = (value = '') => {
-	const lookupValue = value.toLowerCase()
-	return users.find(({ username }) => username === lookupValue)
+const findUserByUsername = (username = '') => {
+	const lowercaseUsername = username.toLowerCase()
+	return users.find(user => user.username === lowercaseUsername)
+}
+
+const getUserInfo = (username = '', password = '') => {
+	const lowercaseUsername = username.toLowerCase()
+	return users.find(user => (
+		user.username === lowercaseUsername
+		&& user.password === password
+	))
 }
 
 
-//- Middleware
+//- Webserver
 
-const registerUser = ({ body }, res) => {
+const bodyParser = require('body-parser')
+// const compression = require('compression')
+// const config = require(__includes + 'config-settings')
+// const cors = require('cors')
+const express = require('express')
+// const fs = require('fs')
+// const helmet = require('helmet')
+
+const app = express()
+app
+.use(bodyParser.json())
+.use(bodyParser.urlencoded({ extended: true }))
+
+.disable('x-powered-by')
+
+.get('/', (req, res) => res.send('Nothing here :('))
+
+.post('/api/register', ({ body }, res) => {
+	console.log('-- User Registration --')
+
 	let response
 	const { username, password } = body
 
@@ -62,47 +89,43 @@ const registerUser = ({ body }, res) => {
 	console.log('users', users)
 	console.log(response)
 	res.send(response)
-}
+})
 
-const loginUser = ({ body }, res) => {
+.post('/api/login', ({ body }, res) => {
+	console.log('-- User Login --')
+
 	let response
+	const { username, password } = body
 
-	const { id } = findUserByUsername(body.username) || {}
-	if (id) {
-		response = { userId: id }
+	if (!username) {
+			console.log('username', username)
+			response = {
+				error: true,
+				message: "You must enter in a valid username.",
+			}
 
-	} else {
+	} else if (!password) {
+		console.log('password', password)
 		response = {
 			error: true,
-			message: "Login failed for that username and password combination.",
+			message: "You must enter in a valid password.",
+		}
+
+	} else {
+		const { id } = getUserInfo(username, password) || {}
+		if (id) {
+			response = { userId: id }
+
+		} else {
+			response = {
+				error: true,
+				message: "Login failed for that username and password combination.",
+			}
 		}
 	}
 
 	console.log(response)
 	res.send(response)
-}
-
-
-//- Webserver
-
-const bodyParser = require('body-parser')
-// const compression = require('compression')
-// const config = require(__includes + 'config-settings')
-// const cors = require('cors')
-const express = require('express')
-// const fs = require('fs')
-// const helmet = require('helmet')
-
-const app = express()
-app
-.use(bodyParser.json())
-.use(bodyParser.urlencoded({ extended: true }))
-
-.disable('x-powered-by')
-
-.get('/', (req, res) => res.send('Nothing here :('))
-
-.post('/api/register', registerUser)
-.post('/api/login', loginUser)
+})
 
 app.listen(4000, () => console.log('[API Server]'))
