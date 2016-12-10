@@ -2,20 +2,31 @@
 
 ## Project Outline
 
-- User Account
-	+ Made up of username, display name, and password
-	+ Create, edit, delete
-	+ Ability to tweet
-	+ Join date
-- Tweet
-	+ Display name and @username (optional in this app?)
-	+ Date and Time
-	+ Text
-- Tweet List and Profile page
-	+ Display name and @username
-	+ Number of Tweets
-	+ Date of first and last tweet
-	+ Tweets in descending order by date and time
+### Views
+- Login
+- Sign-up
+- Personal Tweet List
+	+ Tweet Creation
+- List of other users
+	+ Optional, show other users and their tweets in columns
+- 404
+
+### User Account
+- Made up of username, display name, and password
+- Create, edit, delete
+- Ability to tweet
+- Join date
+
+### Tweet
+- Display name and @username (optional in this app?)
+- Date and Time
+- Text
+
+### Tweet List and Profile page
+- Display name and @username
+- Number of Tweets
+- Date of first and last tweet
+- Tweets in descending order by date and time
 
 ## Prerequisites
 
