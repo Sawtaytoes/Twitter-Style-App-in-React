@@ -1,18 +1,88 @@
-// Data Storage
+//- Data Storage
 
 const users = [{
-	username: 'sample',
+	id: 0,
 	displayName: 'Sam Pull',
-	password: '',
+	username: 'sample',
+	password: 'pass',
+	joinDate: new Date('11/12/2016'),
 }]
+let nextUserId = 1
 
-// Functions
+
+//- Functions
 
 const findUserByName = (lookupName = '') => {
 	return users.find(({ name }) => name === lookupName.toLowerCase())
 }
 
-// Webserver
+
+//- Middleware
+
+const registerUser = ({ body }, res) => {
+	let response
+	const { username, password } = body
+
+	if (findUserByName(username)) {
+		response = {
+			error: true,
+			message: "User already exists with that name.",
+		}
+
+	} else if (!username) {
+		console.log('username', username)
+		response = {
+			error: true,
+			message: "You must enter in a valid username.",
+		}
+
+	} else if (!password) {
+		console.log('password', password)
+		response = {
+			error: true,
+			message: "You must enter in a valid password.",
+		}
+
+	} else {
+		users.push({
+			id: nextUserId,
+			displayName: '',
+			username: username,
+			password: password,
+			joinDate: new Date(),
+		})
+		nextUserId += 1
+
+		response = {
+			message: "You've been successfully registered."
+		}
+	}
+
+	console.log('users', users)
+	console.log(response)
+	res.send(response)
+}
+
+const loginUser = ({ body }, res) => {
+	let response
+
+	const { id } = findUserByName(body.username) || {}
+	if (id) {
+		response = { userId: id }
+
+	} else {
+		response = {
+			error: true,
+			message: "Login failed for that username and password combination.",
+		}
+	}
+
+	console.log(response)
+	res.send(response)
+}
+
+
+//- Webserver
 
 const bodyParser = require('body-parser')
 // const compression = require('compression')
@@ -31,40 +101,7 @@ app
 
 .get('/', (req, res) => res.send('Nothing here :('))
 
-.post('/api/register', ({ body }, res) => {
-	let response
-
-	if (findUserByName(body.username)) {
-		response = {
-			error: true,
-			message: "User already exists with that name.",
-		}
-
-	} else {
-		response = {
-			message: "You've been successfully registered."
-		}
-	}
-
-	console.log(response)
-	res.send(response)
-})
-.post('/api/login', ({ body }, res) => {
-	let response
-
-	const { id } = findUserByName(body.username) || {}
-	if (id) {
-		response = { userId: id }
-
-	} else {
-		response = {
-			error: true,
-			message: "Login failed for that username and password combination.",
-		}
-	}
-
-	console.log(response)
-	res.send(response)
-})
+.post('/api/register', registerUser)
+.post('/api/login', loginUser)
 
 app.listen(4000, () => console.log('[API Server]'))
