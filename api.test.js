@@ -28,51 +28,6 @@ const getUserId = t => responseWrapper(({ userId }) => (
 	t.equal(typeof userId, 'number', `Received UserId: ${userId}`)
 ))
 
-//- Registration
-
-test('Registration: No Data', t => {
-	fetch(`${urlRoot}user`, Object.assign({}, request))
-	.then(res => res.json())
-	.then(shouldError(t))
-	.catch(err => t.error(err))
-	.then(() => t.end())
-})
-
-test('Registration: Username Only', t => {
-	const body = JSON.stringify({ username })
-	fetch(`${urlRoot}user`, Object.assign({}, request, { body }))
-	.then(res => res.json())
-	.then(shouldError(t))
-	.catch(err => t.error(err))
-	.then(() => t.end())
-})
-
-test('Registration: Password Only', t => {
-	const body = JSON.stringify({ password })
-	fetch(`${urlRoot}user`, Object.assign({}, request, { body }))
-	.then(res => res.json())
-	.then(shouldError(t))
-	.catch(err => t.error(err))
-	.then(() => t.end())
-})
-
-test('Registration: Username and Blank Password', t => {
-	const body = JSON.stringify({ username, password: '' })
-	fetch(`${urlRoot}user`, Object.assign({}, request, { body }))
-	.then(res => res.json())
-	.then(shouldError(t))
-	.catch(err => t.error(err))
-	.then(() => t.end())
-})
-
-test('Registration: Username and Password', t => {
-	const body = JSON.stringify({ username, password })
-	fetch(`${urlRoot}user`, Object.assign({}, request, { body }))
-	.then(res => res.json())
-	.then(shouldNotError(t))
-	.catch(err => t.error(err))
-	.then(() => t.end())
-})
 
 //- Login
 
@@ -126,6 +81,53 @@ test('Login: Username and Password', t => {
 	.then(res => res.json())
 	.then(shouldNotError(t))
 	.then(getUserId(t))
+	.catch(err => t.error(err))
+	.then(() => t.end())
+})
+
+
+//- Registration
+
+test('Registration: No Data', t => {
+	fetch(`${urlRoot}user`, Object.assign({}, request))
+	.then(res => res.json())
+	.then(shouldError(t))
+	.catch(err => t.error(err))
+	.then(() => t.end())
+})
+
+test('Registration: Username Only', t => {
+	const body = JSON.stringify({ username })
+	fetch(`${urlRoot}user`, Object.assign({}, request, { body }))
+	.then(res => res.json())
+	.then(shouldError(t))
+	.catch(err => t.error(err))
+	.then(() => t.end())
+})
+
+test('Registration: Password Only', t => {
+	const body = JSON.stringify({ password })
+	fetch(`${urlRoot}user`, Object.assign({}, request, { body }))
+	.then(res => res.json())
+	.then(shouldError(t))
+	.catch(err => t.error(err))
+	.then(() => t.end())
+})
+
+test('Registration: Username and Blank Password', t => {
+	const body = JSON.stringify({ username, password: '' })
+	fetch(`${urlRoot}user`, Object.assign({}, request, { body }))
+	.then(res => res.json())
+	.then(shouldError(t))
+	.catch(err => t.error(err))
+	.then(() => t.end())
+})
+
+test('Registration: Username and Password', t => {
+	const body = JSON.stringify({ username, password })
+	fetch(`${urlRoot}user`, Object.assign({}, request, { body }))
+	.then(res => res.json())
+	.then(shouldNotError(t))
 	.catch(err => t.error(err))
 	.then(() => t.end())
 })
