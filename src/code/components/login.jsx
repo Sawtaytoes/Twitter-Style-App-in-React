@@ -1,6 +1,12 @@
 import React, { PureComponent, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
+// Actions
+import {
+	setLoading,
+	setLoaded,
+} from 'ducks/account-management'
+
 // Utilities
 import StylesLoader from 'utilities/styles-loader'
 
@@ -23,9 +29,14 @@ class Login extends PureComponent {
 	}
 
 	handleSubmission() {
-		const { dispatch, submit, action } = this.props
+		const { dispatch, submit, action, loading } = this.props
+		if (loading) { return }
+
+		dispatch(setLoading())
+
 		submit(this.fields)
 		.then(json => dispatch(action(json, this.fields)))
+		.then(() => dispatch(setLoaded()))
 	}
 
 	handleInputChanged(fieldName) {
@@ -33,7 +44,7 @@ class Login extends PureComponent {
 	}
 
 	render() {
-		const { title, error, message } = this.props
+		const { error, loading, message, title } = this.props
 		return (
 			<div>
 				{title && <h2>{title}</h2>}
@@ -56,6 +67,7 @@ class Login extends PureComponent {
 						onChange={this.handleInputChanged('password')}
 					/>
 					<button onClick={this.handleSubmission.bind(this)}>{title}</button>
+					{loading && <span><i className="fa fa-spinner fa-pulse fa-fw"></i></span>}
 				</form>
 			</div>
 		)
@@ -64,5 +76,6 @@ class Login extends PureComponent {
 
 export default connect(({ accountManagement }) => ({
 	error: accountManagement.error,
+	loading: accountManagement.loading,
 	message: accountManagement.message,
 }))(stylesLoader.render(Login))

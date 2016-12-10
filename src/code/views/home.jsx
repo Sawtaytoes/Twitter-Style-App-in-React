@@ -1,12 +1,15 @@
 import React, { PureComponent } from 'react'
-import { Match } from 'react-router'
-import { Link } from 'react-router'
+import { connect } from 'react-redux'
+import { Match, Link } from 'react-router'
 
 // Components
 import Login from 'components/login'
 
 // Actions
-import { login } from 'ducks/account-management'
+import {
+	login,
+	logout,
+} from 'ducks/account-management'
 
 // Utilities
 import StylesLoader from 'utilities/styles-loader'
@@ -22,6 +25,11 @@ const submissionHandler = (url, options) => fields => {
 }
 
 class Home extends PureComponent {
+	handleLogout() {
+		const { dispatch } = this.props
+		dispatch(logout())
+	}
+
 	render() { return (
 		<div>
 			<h1>Hello World</h1>
@@ -36,6 +44,8 @@ class Home extends PureComponent {
 				</ul>
 			</nav>
 
+			<p><a href="javascript:" onClick={this.handleLogout.bind(this)}>LOGOUT</a></p>
+
 			<Match pattern="/login" render={() => <Login
 				title="Login"
 				submit={submissionHandler('/api/login', { method: 'POST' })}
@@ -46,8 +56,15 @@ class Home extends PureComponent {
 				submit={submissionHandler('/api/user', { method: 'POST' })}
 				action={login}
 			/>} />
+			<Match pattern="/tweets" render={() => <Login
+				title="Sign-Up"
+				submit={submissionHandler('/api/user', { method: 'POST' })}
+				action={login}
+			/>} />
 		</div>
 	)}
 }
 
-export default stylesLoader.render(Home)
+export default connect(({ accountManagement }) => ({
+	userId: accountManagement.userId,
+}))(stylesLoader.render(Home))
