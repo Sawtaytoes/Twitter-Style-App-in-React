@@ -24,6 +24,13 @@ const secureServer = app => {
 	}, app)
 }
 
+const proxyAPI = proxy(config.getSafeUrl(config.getAPIServerUrl), {
+	decorateRequest: proxyReq => {
+		proxyReq.headers['Content-Type'] = 'application/json'
+	},
+	https: config.isSecure(),
+})
+
 const sendEmail = (req, res) => {
 	require(`${dir.services}send-email`)(req.body, res)
 }
@@ -44,7 +51,7 @@ app
 .use(bodyParser.urlencoded({ extended: false }))
 .disable('x-powered-by')
 
-.use(config.getAPIPath(), proxy(config.getSafeUrl(config.getAPIServerUrl)))
+.use(config.getAPIPath(), proxyAPI)
 .get('*.js', (req, res, next) => {
 	req.url = `${req.url}.gz`
 	res.set('Content-Encoding', 'gzip')

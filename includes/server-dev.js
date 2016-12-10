@@ -16,6 +16,13 @@ const onBuild = (taskName, getServerUrl, err) => {
 	console.info(`[${taskName}]`, getServerUrl())
 }
 
+const proxyAPI = proxy(config.getSafeUrl(config.getAPIServerUrl), {
+	decorateRequest: (proxyReq, originalReq) => {
+		proxyReq.headers['Content-Type'] = 'application/json'
+	},
+	https: config.isSecure(),
+})
+
 const sendEmail = (req, res) => {
 	require(`${dir.services}send-email`)(req.body, res)
 }
@@ -38,7 +45,7 @@ express()
 .use(bodyParser.json())
 .use(bodyParser.urlencoded({ extended: false }))
 
-.use(config.getAPIPath(), proxy(config.getSafeUrl(config.getAPIServerUrl)))
+.use(config.getAPIPath(), proxyAPI)
 .get(config.getTestsPath(), loadTests)
 .post(config.getMailSendPath(), sendEmail)
 .all('*', loadSite)
