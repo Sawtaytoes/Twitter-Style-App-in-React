@@ -77,7 +77,7 @@ const secureServer = app => {
 app
 .use(compression())
 .use(helmet())
-.use(cors({ origin: config.getSafePort(config.getServerUrl), optionsSuccessStatus: 200 }))
+.use(cors({ origin: config.getSafeUrl(config.getServerUrl), optionsSuccessStatus: 200 }))
 .use(bodyParser.json())
 .use(bodyParser.urlencoded({ extended: true }))
 .disable('x-powered-by')

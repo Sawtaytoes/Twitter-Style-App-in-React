@@ -3,6 +3,7 @@ const compression = require('compression')
 const express = require('express')
 const fs = require('fs')
 const helmet = require('helmet')
+const proxy = require('express-http-proxy')
 
 // Configs
 const dir = require(`${global.baseDir}/global-dirs`)
@@ -42,6 +43,8 @@ app
 .use(bodyParser.json())
 .use(bodyParser.urlencoded({ extended: false }))
 .disable('x-powered-by')
+
+.use(config.getAPIPath(), proxy(config.getSafeUrl(config.getAPIServerUrl)))
 .get('*.js', (req, res, next) => {
 	req.url = `${req.url}.gz`
 	res.set('Content-Encoding', 'gzip')

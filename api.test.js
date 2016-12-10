@@ -10,7 +10,7 @@ const dir = require(`${global.baseDir}/global-dirs`)
 const config = require(`${dir.includes}config-settings`)
 
 //- Vars
-const urlRoot = `${config.getSafePort(config.getAPIServerUrl)}/`
+const urlRoot = `${config.getSafeUrl(config.getAPIServerUrl)}/`
 const request = { headers: { 'Content-Type': 'application/json' } }
 const userId = 0
 const displayName = 'Samuel'

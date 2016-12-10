@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser')
 const express = require('express')
+const proxy = require('express-http-proxy')
 const webpack = require('webpack')
 const webpackDevServer = require('webpack-dev-server')
 
@@ -37,6 +38,7 @@ express()
 .use(bodyParser.json())
 .use(bodyParser.urlencoded({ extended: false }))
 
+.use(config.getAPIPath(), proxy(config.getSafeUrl(config.getAPIServerUrl)))
 .get(config.getTestsPath(), loadTests)
 .post(config.getMailSendPath(), sendEmail)
 .all('*', loadSite)

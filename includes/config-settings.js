@@ -77,7 +77,7 @@ module.exports = {
 	getAPIPort: () => config.apiPort,
 	getAPIPath: () => config.apiPath,
 
-	getSafePort: portFunc => portFunc().replace('0.0.0.0', 'localhost'),
+	getSafeUrl: portFunc => portFunc().replace('0.0.0.0', 'localhost'),
 
 	getTestsPath: () => config.testsPath,
 
