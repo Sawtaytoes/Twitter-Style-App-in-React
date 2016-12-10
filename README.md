@@ -1,5 +1,22 @@
 # Twitter Style App in React
 
+## Project Outline
+
+- User Account
+	+ Made up of username, display name, and password
+	+ Create, edit, delete
+	+ Ability to tweet
+	+ Join date
+- Tweet
+	+ Display name and @username (optional in this app?)
+	+ Date and Time
+	+ Text
+- Tweet List and Profile page
+	+ Display name and @username
+	+ Number of Tweets
+	+ Date of first and last tweet
+	+ Tweets in descending order by date and time
+
 ## Prerequisites
 
 ### Required
