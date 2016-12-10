@@ -9,11 +9,17 @@ try {
 const configDefaults = {
 	env: 'production',                            // Can be 'development' or 'production'.
 
-	//- Server
+	//- Server (use this in your browser)
 	protocol: 'http',                             // Using `https` requires valid certificates.
 	hostname: '0.0.0.0',                          // Can be 0.0.0.0 for binding to all ports.
 	port: 3000,                                   // Port of webserver.
+
+	//- Proxy (Webpack Dev Server)
 	// proxyPort: 3001,                           // Optional. Will be `port + 1` if not defined.
+
+	//- API
+	// apiPort: 3002,                             // Optional. Will be `port + 2` if not defined.
+	apiPath: '/api',                              // Path used when performing data calls to the api
 
 	//- Testing
 	testsPath: '/tests',                          // Path used when performing unit-tests
@@ -52,6 +58,7 @@ const config = Object.assign({}, configDefaults, configEnv, configCustom)
 config.port = Number(config.port)
 config.proxyHostname = config.proxyHostname || config.hostname !== '0.0.0.0' && config.hostname || 'localhost'
 config.proxyPort = Number(config.proxyPort || config.port + 1)
+config.apiPort = Number(config.apiPort || config.port + 2)
 
 module.exports = {
 	isSecure: () => config.protocol === 'https',
@@ -67,10 +74,16 @@ module.exports = {
 	getProxyPort: () => config.proxyPort,
 	getProxyHostname: () => config.proxyHostname,
 
+	getAPIPort: () => config.apiPort,
+	getAPIPath: () => config.apiPath,
+
+	getSafePort: portFunc => portFunc().replace('0.0.0.0', 'localhost'),
+
 	getTestsPath: () => config.testsPath,
 
 	getServerUrl: () => `${config.protocol}://${config.hostname}:${config.port}`,
 	getProxyServerUrl: () => `http://${config.proxyHostname}:${config.proxyPort}`,
+	getAPIServerUrl: () => `${config.protocol}://${config.hostname}:${config.apiPort}`,
 
 	getMailSendPath: () => config.mailSendPath,
 	getMailOptions: () => config.mailOptions,

@@ -1,4 +1,13 @@
+// Global Dir Hack
+global.baseDir = `${__dirname}/`
+
+// Load Config settings
+const dir = require(`${global.baseDir}/global-dirs`)
+const config = require(`${dir.includes}config-settings`)
+
 //- Functions
+
+const logger = config.isDev() ? console.log : () => {}
 
 const addSampleUser = () => {
 	users.push({
@@ -18,7 +27,12 @@ const resetUsers = () => {
 
 const formatUsername = (username = '') => username.toLowerCase()
 
-const findUserByUsername = (username = '') => {
+const getUserById = (userId = -1) => {
+	const formattedUserId = Number(userId)
+	return users.find(user => user.id === formattedUserId)
+}
+
+const getUserByUsername = (username = '') => {
 	const formattedUsername = formatUsername(username)
 	return users.find(user => user.username === formattedUsername)
 }
@@ -40,43 +54,49 @@ addSampleUser()
 //- Webserver
 
 const bodyParser = require('body-parser')
-// const compression = require('compression')
+const compression = require('compression')
 const cors = require('cors')
 const express = require('express')
-// const fs = require('fs')
-// const helmet = require('helmet')
+const fs = require('fs')
+const helmet = require('helmet')
 
-// const config = require(__includes + 'config-settings')
 const app = express()
+const secureServer = app => {
+	const https = require('https')
+	const enforce = require('express-sslify')
+
+	app
+	.use(enforce.HTTPS({ trustProtoHeader: true }))
+
+	return https.createServer({
+		cert: fs.readFileSync('./conf/domain-crt.txt'),
+		key: fs.readFileSync('./conf/key.pem'),
+	}, app)
+}
+
 app
-.use(cors({ origin: '*', optionsSuccessStatus: 200 }))
+.use(compression())
+.use(helmet())
+.use(cors({ origin: config.getSafePort(config.getServerUrl), optionsSuccessStatus: 200 }))
 .use(bodyParser.json())
 .use(bodyParser.urlencoded({ extended: true }))
-
 .disable('x-powered-by')
 
-.get('*', (req, res) => res.send(''))
-
-.get('/private/reset-users', (req, res) => {
-	resetUsers()
-	res.send({ message: "Successfully reset all users." })
-})
-
-.post('/api/login', ({ body }, res) => {
-	console.log('-- User Login --')
+.post('/login', ({ body }, res) => {
+	logger('\n-- Login --')
 
 	let response
 	const { username, password } = body
 
 	if (!username) {
-			console.log('username', username)
+			logger('username', username)
 			response = {
 				error: true,
 				message: "You must enter in a valid username.",
 			}
 
 	} else if (!password) {
-		console.log('password', password)
+		logger('password', password)
 		response = {
 			error: true,
 			message: "You must enter in a valid password.",
@@ -95,23 +115,59 @@ app
 		}
 	}
 
-	console.log(response)
+	logger(response)
 	res.send(response)
 })
 
-.post('/api/user', ({ body }, res) => {
-	console.log('-- User Registration --')
+.delete('/users', (req, res) => {
+	resetUsers()
+	res.send({ message: "Successfully reset all users." })
+})
+
+.get('/user/:userId', ({ params }, res) => {
+	logger('\n-- Update User --')
+
+	let response
+	const { userId } = params
+
+	if (!userId) {
+		response = {
+			error: true,
+			message: "Missing id for user.",
+		}
+
+	} else {
+		const user = getUserById(userId)
+
+		if (!user) {
+			response = {
+				error: true,
+				message: "No user found with that id.",
+			}
+
+		} else {
+			const { displayName, username, joinDate } = user
+
+			response = {
+				displayName,
+				username,
+				joinDate,
+				message: "Successfully retrieved user data.",
+			}
+		}
+	}
+
+	logger(response)
+	res.send(response)
+})
+
+.post('/user', ({ body }, res) => {
+	logger('\n-- Register User --')
 
 	let response
 	const { username, password } = body
 
-	if (findUserByUsername(username)) {
-		response = {
-			error: true,
-			message: "User already exists with that name.",
-		}
-
-	} else if (!username) {
+	if (!username) {
 		response = {
 			error: true,
 			message: "You must enter in a valid username.",
@@ -121,6 +177,12 @@ app
 		response = {
 			error: true,
 			message: "You must enter in a valid password.",
+		}
+
+	} else if (getUserByUsername(username)) {
+		response = {
+			error: true,
+			message: "User already exists with that name.",
 		}
 
 	} else {
@@ -138,8 +200,52 @@ app
 		nextUserId += 1
 	}
 
-	console.log(response)
+	logger(response)
 	res.send(response)
 })
 
-app.listen(4000, () => console.log('[API Server]'))
+.put('/user/:userId', ({ params, body }, res) => {
+	logger('\n-- Update User --')
+
+	let response
+	const { userId } = params
+	const { displayName } = body
+
+	if (!userId) {
+		response = {
+			error: true,
+			message: "Missing id for user.",
+		}
+
+	} else if (!displayName) {
+		response = {
+			error: true,
+			message: "You must enter in a valid display name.",
+		}
+
+	} else {
+		const user = getUserById(userId)
+
+		if (!user) {
+			response = {
+				error: true,
+				message: "No user found with that id.",
+			}
+
+		} else {
+			user.displayName = displayName
+			response = {
+				message: "Successfully updated user info.",
+			}
+		}
+	}
+
+	logger(response)
+	res.send(response)
+})
+
+const server = config.isSecure() ? secureServer(app) : app
+server.listen(config.getAPIPort(), err => {
+	if (err) { console.error(err) }
+	console.info('Web Server running as', config.getAPIServerUrl())
+})
