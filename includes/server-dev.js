@@ -17,7 +17,7 @@ const onBuild = (taskName, getServerUrl, err) => {
 }
 
 const proxyAPI = proxy(config.getSafeUrl(config.getAPIServerUrl), {
-	decorateRequest: (proxyReq, originalReq) => {
+	decorateRequest: proxyReq => {
 		proxyReq.headers['Content-Type'] = 'application/json'
 	},
 	https: config.isSecure(),
