@@ -5,11 +5,21 @@ import { Link } from 'react-router'
 // Components
 import Login from 'components/login'
 
+// Actions
+import { login } from 'ducks/account-management'
+
 // Utilities
 import StylesLoader from 'utilities/styles-loader'
 
 // Styles
 const stylesLoader = StylesLoader.create()
+
+const submissionHandler = (url, options) => fields => {
+	const body = JSON.stringify(fields)
+	return fetch(url, { ...options, headers: { 'Content-Type': 'application/json' }, body })
+		.then(res => res.json())
+		.catch(err => console.error(err))
+}
 
 class Home extends PureComponent {
 	render() { return (
@@ -28,11 +38,13 @@ class Home extends PureComponent {
 
 			<Match pattern="/login" render={() => <Login
 				title="Login"
-				action="/api/login"
+				submit={submissionHandler('/api/login', { method: 'POST' })}
+				action={login}
 			/>} />
 			<Match pattern="/sign-up" render={() => <Login
 				title="Sign-Up"
-				action="/api/register"
+				submit={submissionHandler('/api/user', { method: 'POST' })}
+				action={login}
 			/>} />
 		</div>
 	)}
