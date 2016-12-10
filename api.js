@@ -134,7 +134,7 @@ app
 		nextUserId += 1
 		console.log(findUserByUsername(username));
 		response = {
-			message: "You've been successfully registered."
+			message: "You've been registered successfully."
 		}
 	}
 
