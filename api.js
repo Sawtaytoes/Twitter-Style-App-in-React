@@ -132,7 +132,6 @@ app
 			joinDate: new Date(),
 		})
 		nextUserId += 1
-		console.log(findUserByUsername(username));
 		response = {
 			message: "You've been registered successfully."
 		}
