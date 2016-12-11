@@ -5,13 +5,23 @@ global.baseDir = `${__dirname}/`
 const dir = require(`${global.baseDir}/global-dirs`)
 const config = require(`${dir.includes}config-settings`)
 
-//- Functions
+
+// --------------------------------------------------------
+// Generic Functions
+// --------------------------------------------------------
 
 const logger = config.isDev() ? console.log : () => {}
 
+
+// --------------------------------------------------------
+// User Functions
+// --------------------------------------------------------
+
+const formatUsername = (username = '') => username.toLowerCase()
+
 const addSampleUser = () => {
 	users.push({
-		id: 0,
+		userId: 0,
 		displayName: 'Sam Pull',
 		username: 'sample',
 		password: 'pass',
@@ -25,11 +35,9 @@ const resetUsers = () => {
 	addSampleUser()
 }
 
-const formatUsername = (username = '') => username.toLowerCase()
-
 const getUserById = (userId = -1) => {
 	const formattedUserId = Number(userId)
-	return users.find(user => user.id === formattedUserId)
+	return users.find(user => user.userId === formattedUserId)
 }
 
 const getUserByUsername = (username = '') => {
@@ -45,13 +53,39 @@ const getUserInfo = (username = '', password = '') => {
 	))
 }
 
-//- Data Storage
+
+// --------------------------------------------------------
+// Tweet Functions
+// --------------------------------------------------------
+
+const addSampleTweet = () => {
+	users.push({
+		tweetId: 0,
+		userId: 0,
+		username: 'sample',
+		password: 'pass',
+		joinDate: new Date('11/12/2016'),
+	})
+	nextUserId += 1
+}
+
+
+// --------------------------------------------------------
+// Data Storage
+// --------------------------------------------------------
 
 const users = []
 let nextUserId = 0
 addSampleUser()
 
-//- Webserver
+const tweets = []
+let nextTweetId = 0
+addSampleTweet()
+
+
+// --------------------------------------------------------
+// Server Setup
+// --------------------------------------------------------
 
 const bodyParser = require('body-parser')
 const compression = require('compression')
@@ -82,6 +116,11 @@ app
 .use(bodyParser.urlencoded({ extended: true }))
 .disable('x-powered-by')
 
+
+// --------------------------------------------------------
+// Login
+// --------------------------------------------------------
+
 .post('/login', ({ body }, res) => {
 	logger('\n-- Login --')
 
@@ -101,9 +140,9 @@ app
 		}
 
 	} else {
-		const { id } = getUserInfo(username, password) || {}
-		if (typeof id === 'number') {
-			response = { userId: id }
+		const { userId } = getUserInfo(username, password) || {}
+		if (typeof userId === 'number') {
+			response = { userId }
 
 		} else {
 			response = {
@@ -117,13 +156,25 @@ app
 	res.send(response)
 })
 
-.delete('/users', (req, res) => {
-	resetUsers()
-	res.send({ message: "Successfully reset all users." })
+
+// --------------------------------------------------------
+// Users
+// --------------------------------------------------------
+
+.get('/user', (req, res) => {
+	logger('\n-- Get Users --')
+
+	let response = {
+		users,
+		message: "Successfully retrieved all users.",
+	}
+
+	logger(response)
+	res.send(response)
 })
 
 .get('/user/:userId', ({ params }, res) => {
-	logger('\n-- Update User --')
+	logger('\n-- Get User --')
 
 	let response
 	const { userId } = params
@@ -184,18 +235,20 @@ app
 		}
 
 	} else {
+		const userId = nextUserId
+
+		nextUserId += 1
 		users.push({
-			id: nextUserId,
+			userId,
 			displayName: '',
 			username: formatUsername(username),
 			password: password,
 			joinDate: new Date(),
 		})
 		response = {
-			userId: nextUserId,
+			userId,
 			message: "You've been registered successfully.",
 		}
-		nextUserId += 1
 	}
 
 	logger(response)
@@ -241,6 +294,48 @@ app
 	logger(response)
 	res.send(response)
 })
+
+.delete('/user/:userId', ({ params }, res) => {
+	logger('\n-- Delete User --')
+
+	let response
+	const { userId } = params
+
+	if (!userId) {
+		response = {
+			error: true,
+			message: "Missing id for user.",
+		}
+
+	} else {
+		const user = getUserById(userId)
+
+		if (!user) {
+			response = {
+				error: true,
+				message: "No user found with that id.",
+			}
+
+		} else {
+			response = {
+				message: "Successfully removed user.",
+			}
+		}
+	}
+
+	logger(response)
+	res.send(response)
+})
+
+.delete('/private/users', (req, res) => {
+	resetUsers()
+	res.send({ message: "Successfully reset all users." })
+})
+
+
+// --------------------------------------------------------
+// Server Listener
+// --------------------------------------------------------
 
 const server = config.isSecure() ? secureServer(app) : app
 server.listen(config.getAPIPort(), err => {
