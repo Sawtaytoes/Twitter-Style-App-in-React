@@ -50,6 +50,11 @@ class Home extends PureComponent {
 
 				<p><a href="javascript:" onClick={this.handleLogout.bind(this)}>LOGOUT</a></p>
 
+				<Match
+					pattern="/"
+					exactly
+					render={() => (isAuthenticated ? <Redirect to="/login"/> : <Redirect to="/profile"/>)}
+				/>
 				<Match pattern="/login" render={() => <Test {...this.props} />} />
 
 				<Match pattern="/login" render={() => isAuthenticated ? <Redirect to="/profile" /> : <Login
