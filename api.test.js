@@ -1,4 +1,8 @@
-require('./api.js')
+try {
+	require('./api.js')
+} catch (err) {
+	// Do Nothing
+}
 require('isomorphic-fetch')
 const test = require('tape')
 
