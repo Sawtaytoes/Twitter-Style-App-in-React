@@ -13,27 +13,18 @@ const LOGOUT = 'LOGOUT'
 // Action Creators
 // --------------------------------------------------------
 
-export const setLoading = () => {
-	return { type: LOADING }
-}
+export const setLoading = () => ({ type: LOADING })
+export const setLoaded = () => ({ type: LOADED })
 
-export const setLoaded = () => {
-	return { type: LOADED }
-}
+export const login = ({ error, message, userId }, { username }) => ({
+	type: LOGIN,
+	error,
+	message,
+	username,
+	userId: Number(userId),
+})
 
-export const login = ({ error, message, userId }, { username }) => {
-	return {
-		type: LOGIN,
-		error,
-		message,
-		username,
-		userId: Number(userId),
-	}
-}
-
-export const logout = () => {
-	return { type: LOGOUT }
-}
+export const logout = () => ({ type: LOGOUT })
 
 // export const register = (username, password) => {
 // 	return {

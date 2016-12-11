@@ -2,10 +2,7 @@ import React, { PureComponent, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
 // Actions
-import {
-	setLoading,
-	setLoaded,
-} from 'ducks/account'
+import { setLoading, setLoaded } from 'ducks/account'
 
 // Utilities
 import StylesLoader from 'utilities/styles-loader'

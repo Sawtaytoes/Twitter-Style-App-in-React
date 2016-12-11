@@ -10,6 +10,7 @@ import {
 	login,
 	logout,
 } from 'ducks/account'
+import { login, logout } from 'ducks/account'
 
 // Utilities
 import StylesLoader from 'utilities/styles-loader'
