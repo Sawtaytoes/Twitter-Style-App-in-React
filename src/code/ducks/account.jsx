@@ -1,8 +1,17 @@
-export const LOADING = 'LOADING'
-export const LOADED = 'LOADED'
-export const LOGIN = 'LOGIN'
-export const LOGOUT = 'LOGOUT'
-export const REGISTER = 'REGISTER'
+// --------------------------------------------------------
+// Actions
+// --------------------------------------------------------
+
+const LOADING = 'LOADING'
+const LOADED = 'LOADED'
+const LOGIN = 'LOGIN'
+const LOGOUT = 'LOGOUT'
+// const REGISTER = 'REGISTER'
+
+
+// --------------------------------------------------------
+// Action Creators
+// --------------------------------------------------------
 
 export const setLoading = () => {
 	return { type: LOADING }
@@ -33,6 +42,11 @@ export const logout = () => {
 // 		password
 // 	}
 // }
+
+
+// --------------------------------------------------------
+// Reducer
+// --------------------------------------------------------
 
 export default (state = {}, action) => {
 	const {

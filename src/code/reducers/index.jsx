@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux'
-import { routerReducer } from 'react-router-redux'
+import { routerReducer as routing } from 'react-router-redux'
 
 // Reducers
-import accountManagement from 'ducks/account-management'
-import locationChange from 'reducers/location-change'
-import tap from 'reducers/tap'
+import account from 'ducks/account'
+import location from 'ducks/location'
+import tap from 'ducks/tap'
 
 export default combineReducers({
-	accountManagement,
-	locationChange,
+	account,
+	location,
 	tap,
-	routing: routerReducer,
+	routing,
 })

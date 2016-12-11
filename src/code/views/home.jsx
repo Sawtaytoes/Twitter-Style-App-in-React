@@ -9,7 +9,7 @@ import Login from 'components/login'
 import {
 	login,
 	logout,
-} from 'ducks/account-management'
+} from 'ducks/account'
 
 // Utilities
 import StylesLoader from 'utilities/styles-loader'
@@ -72,8 +72,8 @@ class Home extends PureComponent {
 	}
 }
 
-export default connect(({ accountManagement }) => ({
-	isAuthenticated: accountManagement.isAuthenticated,
-	userId: accountManagement.userId,
-	username: accountManagement.username,
+export default connect(({ account }) => ({
+	isAuthenticated: account.isAuthenticated,
+	userId: account.userId,
+	username: account.username,
 }))(stylesLoader.render(Home))

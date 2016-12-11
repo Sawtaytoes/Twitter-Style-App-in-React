@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import {
 	setLoading,
 	setLoaded,
-} from 'ducks/account-management'
+} from 'ducks/account'
 
 // Utilities
 import StylesLoader from 'utilities/styles-loader'
@@ -74,8 +74,8 @@ class Login extends PureComponent {
 	}
 }
 
-export default connect(({ accountManagement }) => ({
-	error: accountManagement.error,
-	loading: accountManagement.loading,
-	message: accountManagement.message,
+export default connect(({ account }) => ({
+	error: account.error,
+	loading: account.loading,
+	message: account.message,
 }))(stylesLoader.render(Login))
