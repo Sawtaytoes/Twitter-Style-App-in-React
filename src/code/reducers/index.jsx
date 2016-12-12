@@ -5,10 +5,12 @@ import { routerReducer as routing } from 'react-router-redux'
 import account from 'ducks/account'
 import location from 'ducks/location'
 import tap from 'ducks/tap'
+import tweet from 'ducks/tweet'
 
 export default combineReducers({
 	account,
 	location,
 	tap,
 	routing,
+	tweet,
 })

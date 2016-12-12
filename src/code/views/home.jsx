@@ -4,12 +4,9 @@ import { Match, Redirect, Link } from 'react-router'
 
 // Components
 import Login from 'components/login'
+import Profile from 'components/profile'
 
 // Actions
-import {
-	login,
-	logout,
-} from 'ducks/account'
 import { login, logout } from 'ducks/account'
 
 // Utilities
@@ -39,7 +36,7 @@ class Home extends PureComponent {
 	}
 
 	render() {
-		const { isAuthenticated, userId, username } = this.props
+		const { isAuthenticated } = this.props
 		return (
 			<div>
 				<nav>
@@ -50,6 +47,15 @@ class Home extends PureComponent {
 				</nav>
 
 				<p><a href="javascript:" onClick={this.handleLogout.bind(this)}>LOGOUT</a></p>
+
+				<h3>Defaults</h3>
+				<dl>
+					<dt>Username</dt>
+					<dd>sample</dd>
+
+					<dt>Password</dt>
+					<dd>pass</dd>
+				</dl>
 
 				<Match
 					pattern="/"
@@ -68,11 +74,7 @@ class Home extends PureComponent {
 					submit={submissionHandler('/api/user', { method: 'POST' })}
 					action={login}
 				/>} />
-				<Match pattern="/profile" render={() => !isAuthenticated ? <Redirect to="/login" /> : <div>
-					<h1>Profile</h1>
-					<p>UserId: {userId}</p>
-					<p>Username: {username}</p>
-				</div>} />
+				<Match pattern="/profile" render={() => !isAuthenticated ? <Redirect to="/login" /> : <Profile />} />
 			</div>
 		)
 	}
@@ -80,6 +82,4 @@ class Home extends PureComponent {
 
 export default connect(({ account }) => ({
 	isAuthenticated: account.isAuthenticated,
-	userId: account.userId,
-	username: account.username,
 }))(stylesLoader.render(Home))
