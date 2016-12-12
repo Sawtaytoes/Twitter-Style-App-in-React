@@ -5,7 +5,9 @@ global.baseDir = `${__dirname}/`
 const dir = require(`${global.baseDir}/global-dirs`)
 const config = require(`${dir.includes}config-settings`)
 const login = require(`${dir.middleware}login`)
+const tweet = require(`${dir.middleware}tweet`)
 const user = require(`${dir.middleware}user`)
+const userTweet = require(`${dir.middleware}user-tweet`)
 
 
 // --------------------------------------------------------
@@ -52,6 +54,23 @@ app
 
 
 // --------------------------------------------------------
+// UserTweet
+// --------------------------------------------------------
+
+.get('/user/:userId/tweet/:tweetId', ({ params, body }, res) => res.send(
+	userTweet.getAll()
+))
+
+.post('/user/:userId/tweet', ({ params, body }, res) => res.send(
+	userTweet.add(params.userId, body.content)
+))
+
+.delete('/user/:userId/tweet', ({ params }, res) => res.send(
+	userTweet.remove(params.userId)
+))
+
+
+// --------------------------------------------------------
 // User
 // --------------------------------------------------------
 
@@ -61,6 +80,10 @@ app
 
 .get('/user/:userId', ({ params }, res) => res.send(
 	user.get(params.userId)
+))
+
+.get('/user/:userId/tweet', (_, res) => res.send(
+	user.getAll()
 ))
 
 .post('/user', ({ body }, res) => res.send(
@@ -80,11 +103,29 @@ app
 ))
 
 
+// --------------------------------------------------------
+// Tweet
+// --------------------------------------------------------
 
+.get('/tweet', (_, res) => res.send(
+	tweet.getAll()
+))
 
+.get('/tweet/:tweetId', ({ params }, res) => res.send(
+	tweet.get(params.tweetId)
+))
 
+.put('/tweet/:tweetId', ({ params, body }, res) => res.send(
+	tweet.update(params.tweetId, body.content)
+))
 
+.delete('/tweet/:tweetId', ({ params }, res) => res.send(
+	tweet.remove(params.tweetId)
+))
 
+.delete('/tweet', (_, res) => res.send(
+	tweet.removeAll()
+))
 
 
 

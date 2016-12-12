@@ -19,18 +19,22 @@ const config = require(`${dir.includes}config-settings`)
 
 const urlRoot = `${config.getSafeUrl(config.getAPIServerUrl)}/`
 const request = { headers: { 'Content-Type': 'application/json' } }
+
 const userId = 0
 const displayName = 'Samuel'
 const username = `fakeUsername${Math.random()}`
 const password = 'fakePassword'
+
+const tweetId = 0
+const content = 'I love pie!'
 
 const responseWrapper = func => response => {
 	func(response || {})
 	return response
 }
 
-const cannotAccess = t => responseWrapper(message => (
-	t.ok(message.includes('Cannot '), `Received Error: ${message}`)
+const cannotAccess = (t, method) => responseWrapper(message => (
+	t.ok(message.includes(`Cannot ${method}`), `Received Error: ${message}`)
 ))
 
 const shouldError = t => responseWrapper(({ error, message }) => (
@@ -192,7 +196,7 @@ test('Update User: No Data', t => {
 	const method = 'PUT'
 	fetch(`${urlRoot}user`, Object.assign({}, request, { method }))
 	.then(res => res.text())
-	.then(cannotAccess(t))
+	.then(cannotAccess(t, method))
 	.catch(err => t.error(err))
 	.then(() => t.end())
 })
@@ -211,7 +215,7 @@ test('Update User: Display Name Only', t => {
 	const body = JSON.stringify({ displayName })
 	fetch(`${urlRoot}user`, Object.assign({}, request, { method, body }))
 	.then(res => res.text())
-	.then(cannotAccess(t))
+	.then(cannotAccess(t, method))
 	.catch(err => t.error(err))
 	.then(() => t.end())
 })
@@ -230,6 +234,122 @@ test('Update User: User ID and Display Name', t => {
 	const method = 'PUT'
 	const body = JSON.stringify({ displayName })
 	fetch(`${urlRoot}user/${userId}`, Object.assign({}, request, { method, body }))
+	.then(res => res.json())
+	.then(shouldNotError(t))
+	.catch(err => t.error(err))
+	.then(() => t.end())
+})
+
+
+// --------------------------------------------------------
+// Tweet
+// --------------------------------------------------------
+
+//- Get Tweet
+
+test('Get Tweets', t => {
+	fetch(`${urlRoot}tweet`)
+	.then(res => res.text())
+	.then(shouldNotError(t))
+	.catch(err => t.error(err))
+	.then(() => t.end())
+})
+
+test('Get Tweet: Tweet ID', t => {
+	fetch(`${urlRoot}tweet/${tweetId}`)
+	.then(res => res.json())
+	.then(shouldNotError(t))
+	.catch(err => t.error(err))
+	.then(() => t.end())
+})
+
+
+//- Update Tweet
+
+test('Update Tweet: No Data', t => {
+	const method = 'PUT'
+	fetch(`${urlRoot}tweet`, Object.assign({}, request, { method }))
+	.then(res => res.text())
+	.then(cannotAccess(t, method))
+	.catch(err => t.error(err))
+	.then(() => t.end())
+})
+
+test('Update Tweet: Tweet ID Only', t => {
+	const method = 'PUT'
+	fetch(`${urlRoot}tweet/${tweetId}`, Object.assign({}, request, { method }))
+	.then(res => res.json())
+	.then(shouldError(t))
+	.catch(err => t.error(err))
+	.then(() => t.end())
+})
+
+test('Update Tweet: Content Only', t => {
+	const method = 'PUT'
+	const body = JSON.stringify({ content })
+	fetch(`${urlRoot}tweet`, Object.assign({}, request, { method, body }))
+	.then(res => res.text())
+	.then(cannotAccess(t, method))
+	.catch(err => t.error(err))
+	.then(() => t.end())
+})
+
+test('Update Tweet: Tweet ID and Blank Content', t => {
+	const method = 'PUT'
+	const body = JSON.stringify({ content: '' })
+	fetch(`${urlRoot}tweet/${tweetId}`, Object.assign({}, request, { method, body }))
+	.then(res => res.json())
+	.then(shouldError(t))
+	.catch(err => t.error(err))
+	.then(() => t.end())
+})
+
+test('Update Tweet: Tweet ID and Content', t => {
+	const method = 'PUT'
+	const body = JSON.stringify({ content })
+	fetch(`${urlRoot}tweet/${tweetId}`, Object.assign({}, request, { method, body }))
+	.then(res => res.json())
+	.then(shouldNotError(t))
+	.catch(err => t.error(err))
+	.then(() => t.end())
+})
+
+
+// --------------------------------------------------------
+// UserTweet
+// --------------------------------------------------------
+
+//- Post Tweet for User
+
+test('Post Tweet: No Data', t => {
+	const method = 'POST'
+	fetch(`${urlRoot}tweet`, Object.assign({}, request, { method }))
+	.then(res => res.text())
+	.then(cannotAccess(t, method))
+	.catch(err => t.error(err))
+	.then(() => t.end())
+})
+
+test('Post Tweet: Blank Content', t => {
+	const method = 'POST'
+	const body = JSON.stringify({ content: '' })
+	fetch(`${urlRoot}user/${userId}/tweet`, Object.assign({}, request, {
+		method,
+		body,
+	}))
+	.then(res => res.json())
+	.then(shouldError(t))
+	.catch(err => t.error(err))
+	.then(() => t.end())
+})
+
+test('Post Tweet: Content', t => {
+	const method = 'POST'
+	const body = JSON.stringify({ content })
+	fetch(`${urlRoot}user/${userId}/tweet`, Object.assign({}, request, {
+		method,
+		body,
+	}))
 	.then(res => res.json())
 	.then(shouldNotError(t))
 	.catch(err => t.error(err))
