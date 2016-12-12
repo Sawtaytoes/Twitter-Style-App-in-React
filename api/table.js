@@ -57,7 +57,6 @@ const Table = (name = '', props = {}) => {
 		const newEntry = {}
 
 		Object.keys(schema).forEach(key => {
-			const schemaEnum = schema[key]
 			const entryValue = entry[key]
 			const currentValue = currentEntry[key]
 			let value
@@ -70,7 +69,7 @@ const Table = (name = '', props = {}) => {
 			} else if (currentValue || currentValue === 0) {
 				value = currentValue == 0 ? 0 : currentValue
 			} else {
-				value = schemaEnum.default()
+				value = schema[key].default()
 			}
 
 			newEntry[key] = value

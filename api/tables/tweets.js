@@ -24,16 +24,24 @@ const Tweets = () => {
 		table.getAllByKeyValue(schema.userId, Number(userId))
 	)
 
+	const add = entry => {
+		const newEntry = Object.assign({}, entry, {
+			[schema.userId]: Number(entry.userId),
+		})
+
+		return table.add(newEntry)
+	}
+
 	const removeAll = () => (
 		TableHelpers.removeAllAndInsertSample(table, sampleEntry())
 	)
 
 	// Object Composition
 	return Object.freeze({
+		add,
 		getAllByUserId,
 		removeAll,
 		schema,
-		add: table.add,
 		delete: table.delete,
 		get: table.get,
 		getAll: table.getAll,
