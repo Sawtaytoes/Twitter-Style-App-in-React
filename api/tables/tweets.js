@@ -2,7 +2,7 @@ const dir = require(`${global.baseDir}/global-dirs`)
 const { Table, TableHelpers } = require(`${dir.api}table`)
 
 const Tweets = () => {
-	const table = Table('user', {
+	const table = Table('tweet', {
 		tweetId: Number,
 		userId: Number,
 		content: String,
