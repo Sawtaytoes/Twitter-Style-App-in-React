@@ -13,7 +13,10 @@ global.baseDir = `${__dirname}/`
 const dir = require(`${global.baseDir}/global-dirs`)
 const config = require(`${dir.includes}config-settings`)
 
-//- Vars
+// --------------------------------------------------------
+// Globals
+// --------------------------------------------------------
+
 const urlRoot = `${config.getSafeUrl(config.getAPIServerUrl)}/`
 const request = { headers: { 'Content-Type': 'application/json' } }
 const userId = 0
@@ -43,7 +46,9 @@ const getUserId = t => responseWrapper(({ userId }) => (
 ))
 
 
-//- Login
+// --------------------------------------------------------
+// Login
+// --------------------------------------------------------
 
 test('Login: No Data', t => {
 	const method = 'POST'
@@ -106,12 +111,16 @@ test('Login: Username and Password', t => {
 })
 
 
+// --------------------------------------------------------
+// User
+// --------------------------------------------------------
+
 //- Get User
 
-test('Get User: No Data', t => {
+test('Get Users', t => {
 	fetch(`${urlRoot}user`)
 	.then(res => res.text())
-	.then(cannotAccess(t))
+	.then(shouldNotError(t))
 	.catch(err => t.error(err))
 	.then(() => t.end())
 })
