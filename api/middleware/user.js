@@ -107,7 +107,11 @@ const update = (userId, displayName) => {
 			}
 
 		} else {
-			Users.update(Users.schema.displayName, displayName)
+			const { schema } = Users
+
+			Users.update(userId, {
+				[schema.displayName]: displayName
+			})
 
 			response = {
 				message: "Successfully updated user info.",

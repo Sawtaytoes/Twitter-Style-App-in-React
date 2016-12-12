@@ -37,6 +37,14 @@ const Table = (name = '', props = {}) => {
 	const getAllByManyValues = lookupParams => {
 		const keys = Object.keys(lookupParams)
 
+		// console.log('filtered', getAll().filter(entry => {
+		// 	return keys.every(key => {
+		// 		console.log('key', key)
+		// 		console.log('entry[key]', entry[key])
+		// 		console.log('lookupParams[key]', lookupParams[key])
+		// 		return entry[key] === lookupParams[key]
+		// 	})
+		// }));
 		return getAll().filter(entry => (
 			keys.every(key => entry[key] === lookupParams[key])
 		))
@@ -45,13 +53,30 @@ const Table = (name = '', props = {}) => {
 
 	const update = (itemId, entry) => {
 		const id = Number(itemId)
+		const currentEntry = get(id) || {}
 		const newEntry = {}
+
 		Object.keys(schema).forEach(key => {
-			if (key === primaryKey) {
-				newEntry[primaryKey] = id
-				return
+			const schemaEnum = schema[key]
+			const entryValue = entry[key]
+			const currentValue = currentEntry[key]
+
+			// Account for 0 being falsy
+			const isPrimaryKey = key === primaryKey && (id === 0 || id)
+			const hasValueInEntry = entryValue || entryValue === 0
+			const hasValueInCurrentEntry = currentValue || currentValue === 0
+
+			if (key === primaryKey && (id || id === 0)) {
+				value = id
+			} else if (entryValue || entryValue === 0) {
+				value = entryValue
+			} else if (currentValue || currentValue === 0) {
+				value = currentValue
+			} else {
+				value = schemaEnum.default()
 			}
-			newEntry[key] = entry[key] || schema[key].default()
+
+			newEntry[key] = value
 		})
 
 		data.set(id, newEntry)
