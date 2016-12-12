@@ -60,18 +60,15 @@ const Table = (name = '', props = {}) => {
 			const schemaEnum = schema[key]
 			const entryValue = entry[key]
 			const currentValue = currentEntry[key]
+			let value
 
-			// Account for 0 being falsy
-			const isPrimaryKey = key === primaryKey && (id === 0 || id)
-			const hasValueInEntry = entryValue || entryValue === 0
-			const hasValueInCurrentEntry = currentValue || currentValue === 0
-
+			// HACK: Make 0 truthy
 			if (key === primaryKey && (id || id === 0)) {
-				value = id
+				value = id == 0 ? 0 : id
 			} else if (entryValue || entryValue === 0) {
-				value = entryValue
+				value = entryValue == 0 ? 0 : entryValue
 			} else if (currentValue || currentValue === 0) {
-				value = currentValue
+				value = currentValue == 0 ? 0 : currentValue
 			} else {
 				value = schemaEnum.default()
 			}
