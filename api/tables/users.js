@@ -63,6 +63,7 @@ const Users = () => {
 		get: table.get,
 		getAll: table.getAll,
 		remove: table.remove,
+		update: table.update,
 	})
 }
 

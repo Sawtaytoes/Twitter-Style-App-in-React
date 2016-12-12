@@ -34,9 +34,7 @@ const Table = (name = '', props = {}) => {
 	}
 	const getByKeyValue = (key, value) => getByManyValues({ [key]: value })
 
-	const add = entry => {
-		const id = getId()
-
+	const update = (id, entry) => {
 		const newEntry = {}
 		Object.keys(schema).forEach(key => {
 			if (key === primaryKey) {
@@ -49,6 +47,11 @@ const Table = (name = '', props = {}) => {
 
 		data.set(id, newEntry)
 		return newEntry
+	}
+
+	const add = entry => {
+		const id = getId()
+		return update(id, entry)
 	}
 
 	const remove = id => data.delete(id)
@@ -67,6 +70,7 @@ const Table = (name = '', props = {}) => {
 		remove,
 		removeAll,
 		schema,
+		update,
 	})
 }
 

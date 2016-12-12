@@ -86,13 +86,7 @@ const update = (userId, displayName) => {
 
 	let response
 
-	if (!userId) {
-		response = {
-			error: true,
-			message: "Missing id for user.",
-		}
-
-	} else if (!displayName) {
+	if (!displayName) {
 		response = {
 			error: true,
 			message: "You must enter in a valid display name.",
@@ -108,7 +102,8 @@ const update = (userId, displayName) => {
 			}
 
 		} else {
-			user.displayName = displayName
+			Users.update(Users.schema.displayName, displayName)
+
 			response = {
 				message: "Successfully updated user info.",
 			}
@@ -130,7 +125,7 @@ const remove = id => {
 const removeAll = () => {
 	Users.removeAll()
 
-	let response = { message: "Successfully reset all users." }
+	let response = { message: "Successfully removed all users." }
 	logger(response)
 	return response
 }
