@@ -4,9 +4,7 @@
 
 const TWEETS_LOADING = 'TWEETS_LOADING'
 const TWEETS_LOADED = 'TWEETS_LOADED'
-const ADD_TWEET = 'ADD_TWEET'
-const EDIT_TWEET = 'EDIT_TWEET'
-const REMOVE_TWEET = 'REMOVE_TWEET'
+const EDITOR_VISIBILITY = 'EDITOR_VISIBILITY'
 
 
 // --------------------------------------------------------
@@ -20,20 +18,14 @@ export const setTweets = tweets => ({
 	tweets,
 })
 
-export const addTweet = (tweetId, content) => ({
-	type: ADD_TWEET,
-	content,
+export const showEditor = () => ({
+	type: EDITOR_VISIBILITY,
+	showEditor: true,
 })
 
-export const editTweet = (tweetId, content) => ({
-	type: EDIT_TWEET,
-	tweetId,
-	content,
-})
-
-export const removeTweet = tweetId => ({
-	type: REMOVE_TWEET,
-	tweetId,
+export const hideEditor = () => ({
+	type: EDITOR_VISIBILITY,
+	showEditor: false,
 })
 
 
@@ -45,8 +37,7 @@ export default (state = {}, action) => {
 	const {
 		type,
 		tweets,
-		tweetId,
-		content,
+		showEditor,
 	} = action
 
 	switch (type) {
@@ -63,22 +54,10 @@ export default (state = {}, action) => {
 			loading: false,
 		}
 
-	case ADD_TWEET:
+	case EDITOR_VISIBILITY:
 		return {
 			...state,
-			tweetId,
-			content,
-		}
-
-	case EDIT_TWEET:
-		return {
-			...state,
-			content,
-		}
-
-	case REMOVE_TWEET:
-		return {
-			...state,
+			showEditor,
 		}
 
 	default:

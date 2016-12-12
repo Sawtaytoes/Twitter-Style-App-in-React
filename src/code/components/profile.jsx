@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 // Components
 import TweetList from 'components/tweet-list'
+import TweetEditor from 'components/tweet-editor'
 
 // Actions
 import { getTweets, setTweets } from 'ducks/tweet'
@@ -45,6 +46,7 @@ class Profile extends PureComponent {
 				<p>UserId: {userId}</p>
 				<p>Username: {username}</p>
 
+				<TweetEditor refresh={this.loadTweets.bind(this)} />
 				<TweetList refresh={this.loadTweets.bind(this)} />
 			</div>
 		)
