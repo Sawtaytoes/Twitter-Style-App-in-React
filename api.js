@@ -57,8 +57,8 @@ app
 // UserTweet
 // --------------------------------------------------------
 
-.get('/user/:userId/tweet/:tweetId', ({ params, body }, res) => res.send(
-	userTweet.getAll()
+.get('/user/:userId/tweet', ({ params }, res) => res.send(
+	userTweet.getAll(params.userId)
 ))
 
 .post('/user/:userId/tweet', ({ params, body }, res) => res.send(

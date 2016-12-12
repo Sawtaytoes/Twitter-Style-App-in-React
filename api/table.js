@@ -34,6 +34,15 @@ const Table = (name = '', props = {}) => {
 	}
 	const getByKeyValue = (key, value) => getByManyValues({ [key]: value })
 
+	const getAllByManyValues = lookupParams => {
+		const keys = Object.keys(lookupParams)
+
+		return getAll().filter(entry => (
+			keys.every(key => entry[key] === lookupParams[key])
+		))
+	}
+	const getAllByKeyValue = (key, value) => getAllByManyValues({ [key]: value })
+
 	const update = (id, entry) => {
 		const newEntry = {}
 		Object.keys(schema).forEach(key => {
@@ -65,6 +74,8 @@ const Table = (name = '', props = {}) => {
 		add,
 		get,
 		getAll,
+		getAllByKeyValue,
+		getAllByManyValues,
 		getByKeyValue,
 		getByManyValues,
 		remove,

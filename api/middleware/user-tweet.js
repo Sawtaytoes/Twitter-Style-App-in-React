@@ -2,11 +2,11 @@ const dir = require(`${global.baseDir}/global-dirs`)
 const logger = require(`${dir.api}logger`)
 const UserTweets = require(`${dir.tables}user-tweets`)
 
-const getAll = () => {
+const getAll = userId => {
 	logger('\n-- Get User Tweets --')
 
 	let response = {
-		tweets: UserTweets.getAll(),
+		tweets: UserTweets.getAll(userId),
 		message: "Successfully retrieved all Tweets.",
 	}
 

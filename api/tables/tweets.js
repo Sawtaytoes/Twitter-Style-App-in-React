@@ -19,8 +19,8 @@ const Tweets = () => {
 	table.add(sampleEntry())
 
 	// Table Overrides
-	const getByUserId = userId => (
-		table.getByKeyValue(schema.userId, userId)
+	const getAllByUserId = userId => (
+		table.getAllByKeyValue(schema.userId, Number(userId))
 	)
 
 	const removeAll = () => (
@@ -29,7 +29,7 @@ const Tweets = () => {
 
 	// Object Composition
 	return Object.freeze({
-		getByUserId,
+		getAllByUserId,
 		removeAll,
 		schema,
 		add: table.add,
