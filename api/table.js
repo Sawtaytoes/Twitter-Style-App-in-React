@@ -43,14 +43,14 @@ const Table = (name = '', props = {}) => {
 	}
 	const getAllByKeyValue = (key, value) => getAllByManyValues({ [key]: value })
 
-	const update = (id, entry) => {
+	const update = (itemId, entry) => {
+		const id = Number(itemId)
 		const newEntry = {}
 		Object.keys(schema).forEach(key => {
 			if (key === primaryKey) {
 				newEntry[primaryKey] = id
 				return
 			}
-
 			newEntry[key] = entry[key] || schema[key].default()
 		})
 

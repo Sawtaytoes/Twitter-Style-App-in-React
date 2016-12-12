@@ -57,7 +57,11 @@ const update = (tweetId, content) => {
 			}
 
 		} else {
-			Tweets.update(Tweets.schema.tweetId, content)
+			const { schema } = Tweets
+
+			Tweets.update(tweetId, {
+				[schema.content]: content
+			})
 
 			response = {
 				message: "Successfully updated tweet info.",
