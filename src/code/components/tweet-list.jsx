@@ -37,7 +37,11 @@ class TweetList extends PureComponent {
 				<button onClick={refresh}>Refresh</button>
 
 				<ul>
-					{tweets.map(({ username, content, postTime }) => (
+					{tweets.sort((a, b) => (
+						a.postTime === b.postTime ? 0
+						: a.postTime < b.postTime ? 1
+						: -1
+					)).map(({ username, content, postTime }) => (
 						<li key={postTime}>
 							<div>Username: {username}</div>
 							<div>Content: {content}</div>
