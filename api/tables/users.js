@@ -7,7 +7,7 @@ const Users = () => {
 		displayName: String,
 		username: String,
 		password: String,
-		joinDate: Date,
+		joinTime: Date,
 	})
 
 	// Setup Table
@@ -17,7 +17,7 @@ const Users = () => {
 		[schema.displayName]: 'Sam Pull',
 		[schema.username]: 'sample',
 		[schema.password]: 'pass',
-		[schema.joinDate]: new Date('11/12/2016'),
+		[schema.joinTime]: new Date('11/12/2016'),
 	})
 
 	table.add(sampleEntry())

@@ -5,8 +5,13 @@ const Users = require(`${dir.tables}users`)
 const getAll = () => {
 	logger('\n-- Get Users --')
 
-	let response = {
-		users: Users.getAll(),
+	let response
+	const users = Users.getAll().map(user => Object.assign({}, user, {
+		password: undefined,
+	}))
+
+	response = {
+		users,
 		message: "Successfully retrieved all users.",
 	}
 

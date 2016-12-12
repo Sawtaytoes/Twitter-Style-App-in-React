@@ -6,14 +6,15 @@ const Tweets = () => {
 		tweetId: Number,
 		userId: Number,
 		content: String,
-		postDate: Date,
+		postTime: Date,
 	})
 
 	// Setup Table
 	const schema = table.schema
 	const sampleEntry = () => ({
 		[schema.userId]: 0,
-		[schema.content]: 'Sam Pull',
+		[schema.content]: 'I love the pies!',
+		[schema.postTime]: new Date('11/13/2016'),
 	})
 
 	table.add(sampleEntry())

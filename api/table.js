@@ -51,7 +51,7 @@ const Table = (name = '', props = {}) => {
 				return
 			}
 
-			newEntry[key] = entry[key] || schema[key].default
+			newEntry[key] = entry[key] || schema[key].default()
 		})
 
 		data.set(id, newEntry)
