@@ -2,8 +2,8 @@
 // Actions
 // --------------------------------------------------------
 
-const LOADING = 'LOADING'
-const LOADED = 'LOADED'
+const ACCOUNT_LOADING = 'ACCOUNT_LOADING'
+const ACCOUNT_LOADED = 'LOADED'
 const LOGIN = 'LOGIN'
 const LOGOUT = 'LOGOUT'
 // const REGISTER = 'REGISTER'
@@ -13,8 +13,8 @@ const LOGOUT = 'LOGOUT'
 // Action Creators
 // --------------------------------------------------------
 
-export const setLoading = () => ({ type: LOADING })
-export const setLoaded = () => ({ type: LOADED })
+export const setLoading = () => ({ type: ACCOUNT_LOADING })
+export const setLoaded = () => ({ type: ACCOUNT_LOADED })
 
 export const login = ({ error, message, userId }, { username }) => ({
 	type: LOGIN,
@@ -49,16 +49,16 @@ export default (state = {}, action) => {
 	} = action
 
 	switch (type) {
-	case LOADING:
+	case ACCOUNT_LOADING:
 		return {
 			...state,
-			loading: true
+			loading: true,
 		}
 
-	case LOADED:
+	case ACCOUNT_LOADED:
 		return {
 			...state,
-			loading: false
+			loading: false,
 		}
 
 	case LOGIN: {
