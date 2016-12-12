@@ -1,5 +1,8 @@
 import React, { PureComponent } from 'react'
-// import GoogleAnalytics from 'react-g-analytics'
+
+// Components
+import Header from 'layouts/header'
+import Footer from 'layouts/footer'
 
 // Utilities
 import StylesLoader from 'utilities/styles-loader'
@@ -12,9 +15,20 @@ const stylesLoader = StylesLoader.create()
 
 class Master extends PureComponent {
 	render() { return (
-		<div>
-			{this.props.children}
-			{/*<GoogleAnalytics id="UA-????????-?" />*/}
+		<div className="site-container">
+			<header className="site-header">
+				<Header />
+			</header>
+
+			<div className="site-content">
+				<main className="site-main">
+					{this.props.children}
+				</main>
+
+				<footer className="site-footer">
+					<Footer />
+				</footer>
+			</div>
 		</div>
 	)}
 }

@@ -1,5 +1,33 @@
 # Twitter Style App in React
 
+## Project Outline
+
+### Views
+- Login
+- Sign-up
+- Personal Tweet List
+	+ Tweet Creation
+- List of other users
+	+ Optional, show other users and their tweets in columns
+- 404
+
+### User Account
+- Made up of username, display name, and password
+- Create, edit, delete
+- Ability to tweet
+- Join date
+
+### Tweet
+- Display name and @username (optional in this app?)
+- Date and Time
+- Text
+
+### Tweet List and Profile page
+- Display name and @username
+- Number of Tweets
+- Date of first and last tweet
+- Tweets in descending order by date and time
+
 ## Prerequisites
 
 ### Required
@@ -76,9 +104,11 @@ Start the local catch-all SMTP server using the command `maildev`.
 ### Development: Local
 ```shell
 npm start
+npm run api
 ```
 
 OR
+
 ```shell
 bash local.sh
 ```
@@ -87,6 +117,7 @@ OR
 
 ```shell
 node index.js
+node api.js
 ```
 
 ### Production: Hosted VPS

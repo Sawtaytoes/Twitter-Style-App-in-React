@@ -1,12 +1,9 @@
 // Views
 import Home from 'views/home'
-import About from 'views/about'
+import Tweets from 'views/tweets'
 import NoMatch from 'views/404'
 
 export const redirs = [{
-	pattern: '/redirect',
-	to: '/',
-}, {
 	pattern: '**/',
 	to: ({ location }) => location.pathname.slice(0, -1),
 	exactly: true,
@@ -24,12 +21,22 @@ export const routes = [{
 	exactly: true,
 	component: Home,
 }, {
-	name: 'about',
-	pattern: '/about',
-	component: About,
+	name: 'home',
+	pattern: '/login',
+	component: Home,
+}, {
+	name: 'home',
+	pattern: '/sign-up',
+	component: Home,
+}, {
+	name: 'profile',
+	pattern: '/profile',
+	component: Home,
+}, {
+	name: 'tweets',
+	pattern: '/tweets',
+	component: Tweets,
 }, {
 	name: '404',
 	component: NoMatch,
 }]
-
-console.error('kevin')

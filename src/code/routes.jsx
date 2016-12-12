@@ -7,7 +7,7 @@ import { redirs, routes } from 'content/route-config'
 import Master from 'layouts/master'
 
 // Actions
-import { locationChanged } from 'actions/location-change'
+import { changeLocation } from 'ducks/location'
 
 class ReduxLocation extends PureComponent {
 	static propTypes = {
@@ -17,7 +17,7 @@ class ReduxLocation extends PureComponent {
 
 	componentWillMount() {
 		const { location, dispatch } = this.props
-		dispatch(locationChanged(location))
+		dispatch(changeLocation(location))
 	}
 
 	render() { return (

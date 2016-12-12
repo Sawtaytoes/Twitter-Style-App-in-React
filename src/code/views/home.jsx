@@ -1,5 +1,13 @@
 import React, { PureComponent } from 'react'
-import { Link } from 'react-router'
+import { connect } from 'react-redux'
+import { Match, Redirect } from 'react-router'
+
+// Components
+import Login from 'components/login'
+import Profile from 'components/profile'
+
+// Actions
+import { login } from 'ducks/account'
 
 // Utilities
 import StylesLoader from 'utilities/styles-loader'
@@ -7,17 +15,61 @@ import StylesLoader from 'utilities/styles-loader'
 // Styles
 const stylesLoader = StylesLoader.create()
 
-class Home extends PureComponent {
-	render() { return (
-		<div>
-			<h1>Hello World</h1>
-			<p>
-				Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.
-			</p>
-
-			<Link to="/about" title="Go to About">About</Link>
-		</div>
-	)}
+const submissionHandler = (url, options) => fields => {
+	const body = JSON.stringify(fields)
+	return fetch(url, { ...options, headers: { 'Content-Type': 'application/json' }, body })
+		.then(res => res.json())
+		.catch(err => console.error(err))
 }
 
-export default stylesLoader.render(Home)
+class Home extends PureComponent {
+	renderLogin() { return (
+		<div>
+			<h3>Credentials</h3>
+			<dl>
+				<dt>Username</dt>
+				<dd>sample</dd>
+
+				<dt>Password</dt>
+				<dd>pass</dd>
+			</dl>
+			<Login
+				title="Login"
+				submit={submissionHandler('/api/login', { method: 'POST' })}
+				action={login}
+			/>
+		</div>
+	)}
+
+	render() {
+		const { isAuthenticated } = this.props
+		return (
+			<div>
+				<h1>Welcome!</h1>
+				<h2>This is my Twitter-style App done in React</h2>
+				<p>
+					This is a rough outline of how one of these async apps can be made using React, Redux, React-Router, and Node.js as an API server.
+				</p>
+
+				<hr />
+
+				<Match
+					pattern=""
+					exactly
+					render={() => (isAuthenticated ? <Redirect to="/login"/> : <Redirect to="/profile"/>)}
+				/>
+				<Match pattern="/login" render={() => isAuthenticated ? <Redirect to="/profile" /> : this.renderLogin()} />
+				<Match pattern="/sign-up" render={() => isAuthenticated ? <Redirect to="/profile" /> : <Login
+					title="Sign-Up"
+					submit={submissionHandler('/api/user', { method: 'POST' })}
+					action={login}
+				/>} />
+				<Match pattern="/profile" render={() => !isAuthenticated ? <Redirect to="/login" /> : <Profile />} />
+			</div>
+		)
+	}
+}
+
+export default connect(({ account }) => ({
+	isAuthenticated: account.isAuthenticated,
+}))(stylesLoader.render(Home))
