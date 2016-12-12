@@ -1,30 +1,36 @@
 export default [{
 	displayInHeader: true,
-	displayWhenLoggedIn: false,
+	onlyDisplayWhenAuthenticated: false,
 	name: 'Home',
 	to: '',
 	description: ""
 }, {
+	displayInHeader: true,
+	onlyDisplayWhenAuthenticated: false,
+	name: 'Tweets',
+	to: 'tweets',
+	description: ""
+}, {
 	displayInHeader: false,
-	displayWhenLoggedIn: false,
+	onlyDisplayWhenAuthenticated: false,
 	name: 'Login',
 	to: 'login',
 	description: ""
 }, {
 	displayInHeader: false,
-	displayWhenLoggedIn: false,
+	onlyDisplayWhenAuthenticated: false,
 	name: 'Sign-Up',
 	to: 'sign-up',
 	description: ""
 }, {
 	displayInHeader: true,
-	displayWhenLoggedIn: true,
+	onlyDisplayWhenAuthenticated: true,
 	name: 'Profile',
 	to: 'profile',
 	description: ""
 }, {
 	displayInHeader: false,
-	displayWhenLoggedIn: true,
+	onlyDisplayWhenAuthenticated: false,
 	name: 'Unit Tests',
 	to: 'tests',
 	description: ""
