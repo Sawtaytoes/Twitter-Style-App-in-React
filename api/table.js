@@ -37,14 +37,6 @@ const Table = (name = '', props = {}) => {
 	const getAllByManyValues = lookupParams => {
 		const keys = Object.keys(lookupParams)
 
-		// console.log('filtered', getAll().filter(entry => {
-		// 	return keys.every(key => {
-		// 		console.log('key', key)
-		// 		console.log('entry[key]', entry[key])
-		// 		console.log('lookupParams[key]', lookupParams[key])
-		// 		return entry[key] === lookupParams[key]
-		// 	})
-		// }));
 		return getAll().filter(entry => (
 			keys.every(key => entry[key] === lookupParams[key])
 		))
