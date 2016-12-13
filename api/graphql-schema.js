@@ -16,14 +16,19 @@ const convertToDateTime = time => ({
 
 const resolvers = {
 	Query: {
-		users: () => Users.getAll(),
-		user: ({ userId }) => Users.get(userId),
-		tweets: () => Tweets.getAll(),
-		tweet: ({ tweetId }) => Tweets.get(tweetId),
+		tweet: (_, { tweetId }) => Tweets.get(tweetId),
+		tweets: (_, { userId, content }) => Tweets.getAllFuzzy({
+			[Tweets.schema.userId]: userId,
+			[Tweets.schema.content]: content,
+		}),
+		user: (_, { userId }) => Users.get(userId),
+		users: (_, { username }) => Users.getAllFuzzy({
+			[Users.schema.username]: username
+		}),
 	},
 
 	User: {
-		tweets: ({ userId }) => Tweets.getAllByUserId(userId),
+		tweets: ({ userId }) => {console.log('userId', Tweets.getAll({[Tweets.schema.userId]: userId})); return Tweets.getAllByUserId(userId)},
 		joinTime: ({ joinTime }) => convertToDateTime(joinTime),
 	},
 
