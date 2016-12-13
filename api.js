@@ -5,9 +5,6 @@ global.baseDir = `${__dirname}/`
 const dir = require(`${global.baseDir}/global-dirs`)
 const config = require(`${dir.includes}config-settings`)
 const login = require(`${dir.middleware}login`)
-const tweet = require(`${dir.middleware}tweet`)
-const user = require(`${dir.middleware}user`)
-const userTweet = require(`${dir.middleware}user-tweet`)
 const { typeDefs, resolvers } = require(`${dir.api}graphql-schema`)
 
 
@@ -56,78 +53,6 @@ app
 .post('/login', ({ body }, res) => res.send(
 	login.getUserId(body.username, body.password)
 ))
-
-
-// --------------------------------------------------------
-// UserTweet
-// --------------------------------------------------------
-
-.get('/user/:userId/tweet', ({ params }, res) => res.send(
-	userTweet.getAll(params.userId)
-))
-
-.post('/user/:userId/tweet', ({ params, body }, res) => res.send(
-	userTweet.add(params.userId, body.content)
-))
-
-.delete('/user/:userId/tweet', ({ params }, res) => res.send(
-	userTweet.remove(params.userId)
-))
-
-
-// --------------------------------------------------------
-// User
-// --------------------------------------------------------
-
-.get('/user', (_, res) => res.send(
-	user.getAll()
-))
-
-.get('/user/:userId', ({ params }, res) => res.send(
-	user.get(params.userId)
-))
-
-.post('/user', ({ body }, res) => res.send(
-	user.add(body.username, body.password)
-))
-
-.put('/user/:userId', ({ params, body }, res) => res.send(
-	user.update(params.userId, body.displayName)
-))
-
-.delete('/user/:userId', ({ params }, res) => res.send(
-	user.remove(params.userId)
-))
-
-.delete('/user', (_, res) => res.send(
-	user.removeAll()
-))
-
-
-// --------------------------------------------------------
-// Tweet
-// --------------------------------------------------------
-
-.get('/tweet', (_, res) => res.send(
-	tweet.getAll()
-))
-
-.get('/tweet/:tweetId', ({ params }, res) => res.send(
-	tweet.get(params.tweetId)
-))
-
-.put('/tweet/:tweetId', ({ params, body }, res) => res.send(
-	tweet.update(params.tweetId, body.content)
-))
-
-.delete('/tweet/:tweetId', ({ params }, res) => res.send(
-	tweet.remove(params.tweetId)
-))
-
-.delete('/tweet', (_, res) => res.send(
-	tweet.removeAll()
-))
-
 
 
 // --------------------------------------------------------
