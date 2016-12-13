@@ -31,7 +31,7 @@ const Users = () => {
 	)
 
 	const getByUsernamePassword = (username, password) => (
-		table.getByManyValues({
+		table.get({
 			[schema.username]: formatUsername(username),
 			[schema.password]: password,
 		})
