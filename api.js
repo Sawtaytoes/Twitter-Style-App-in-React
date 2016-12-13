@@ -82,10 +82,6 @@ app
 	user.get(params.userId)
 ))
 
-.get('/user/:userId/tweet', (_, res) => res.send(
-	user.getAll()
-))
-
 .post('/user', ({ body }, res) => res.send(
 	user.add(body.username, body.password)
 ))
