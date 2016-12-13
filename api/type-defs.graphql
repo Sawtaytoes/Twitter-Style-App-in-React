@@ -1,0 +1,31 @@
+type User {
+	userId: Int!
+	username: String
+	tweets: [Tweet]!
+	joinTime: DateTime
+}
+
+type Tweet {
+	tweetId: Int!
+	userId: Int
+	user: User!
+	content: String
+	postTime: DateTime
+}
+
+type DateTime {
+	time: String
+	unixTime: String
+}
+
+type Query {
+	users: [User]!
+	user(userId: Int): User
+	tweets: [Tweet]!
+	tweet(tweetId: Int): Tweet
+}
+
+schema {
+	query: Query
+	# mutation: Mutation
+}

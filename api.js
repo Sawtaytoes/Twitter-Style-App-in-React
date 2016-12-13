@@ -8,6 +8,7 @@ const login = require(`${dir.middleware}login`)
 const tweet = require(`${dir.middleware}tweet`)
 const user = require(`${dir.middleware}user`)
 const userTweet = require(`${dir.middleware}user-tweet`)
+const { typeDefs, resolvers } = require(`${dir.api}graphql-schema`)
 
 
 // --------------------------------------------------------
@@ -20,20 +21,15 @@ const cors = require('cors')
 const express = require('express')
 const fs = require('fs')
 const helmet = require('helmet')
+const { graphqlExpress, graphiqlExpress } = require('graphql-server-express')
+const { makeExecutableSchema } = require('graphql-tools')
+
+const executableSchema = makeExecutableSchema({
+	typeDefs,
+	resolvers,
+});
 
 const app = express()
-const secureServer = app => {
-	const https = require('https')
-	const enforce = require('express-sslify')
-
-	app
-	.use(enforce.HTTPS({ trustProtoHeader: true }))
-
-	return https.createServer({
-		cert: fs.readFileSync('./conf/domain-crt.txt'),
-		key: fs.readFileSync('./conf/key.pem'),
-	}, app)
-}
 
 app
 .use(compression())
@@ -41,6 +37,15 @@ app
 .use(cors({ origin: config.getSafeUrl(config.getServerUrl), optionsSuccessStatus: 200 }))
 .use(bodyParser.json())
 .use(bodyParser.urlencoded({ extended: true }))
+
+.use('/graphql', bodyParser.json(), graphqlExpress({
+	schema: executableSchema,
+}))
+
+.use('/graphiql', graphiqlExpress({
+	endpointURL: '/graphql',
+}))
+
 .disable('x-powered-by')
 
 
@@ -128,6 +133,19 @@ app
 // --------------------------------------------------------
 // Server Listener
 // --------------------------------------------------------
+
+const secureServer = app => {
+	const https = require('https')
+	const enforce = require('express-sslify')
+
+	app
+	.use(enforce.HTTPS({ trustProtoHeader: true }))
+
+	return https.createServer({
+		cert: fs.readFileSync('./conf/domain-crt.txt'),
+		key: fs.readFileSync('./conf/key.pem'),
+	}, app)
+}
 
 const server = config.isSecure() ? secureServer(app) : app
 server.listen(config.getAPIPort(), err => {
