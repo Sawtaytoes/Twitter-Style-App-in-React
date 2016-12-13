@@ -5,7 +5,7 @@ const Tweets = require(`${dir.tables}tweets`)
 const Users = require(`${dir.tables}users`)
 
 const typeDefs = fs.readFileSync(
-	`${dir.api}type-defs.graphql`, 'utf8',
+	`${dir.api}type-defs.gql`, 'utf8',
 	err => console.error(err)
 )
 
