@@ -28,7 +28,7 @@ const resolvers = {
 	},
 
 	User: {
-		tweets: ({ userId }) => {console.log('userId', Tweets.getAll({[Tweets.schema.userId]: userId})); return Tweets.getAllByUserId(userId)},
+		tweets: ({ userId }) => Tweets.getAllByUserId(userId),
 		joinTime: ({ joinTime }) => convertToDateTime(joinTime),
 	},
 
