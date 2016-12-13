@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
 import { AppContainer } from 'react-hot-loader'
-import { Provider } from 'react-redux'
+import { ApolloProvider as Provider } from 'react-apollo'
 import { BrowserRouter as Router } from 'react-router'
-
-// Store and Routes
-import { store } from 'utilities/store'
 
 // Components
 import Routes from 'routes'
 
+// Utilities
+import { store } from 'utilities/store'
+import { client } from 'utilities/apollo-client'
+
 export default class ClientRoot extends Component {
 	render() { return (
 		<AppContainer>
-			<Provider store={store}>
+			<Provider store={store} client={client}>
 				<Router>
 					<Routes />
 				</Router>

@@ -1,11 +1,9 @@
-import React, { PureComponent } from 'react'
-import { connect } from 'react-redux'
+import React, { PureComponent, PropTypes } from 'react'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 // Components
 import TweetList from 'components/tweet-list'
-
-// Actions
-import { getTweets, setTweets } from 'ducks/tweet'
 
 // Utilities
 import StylesLoader from 'utilities/styles-loader'
@@ -13,37 +11,30 @@ import StylesLoader from 'utilities/styles-loader'
 // Styles
 const stylesLoader = StylesLoader.create()
 
+const GET_TWEETS = gql`query {
+tweets {
+	content
+	postTime {
+		time
+		unixTime
+	}
+	user {
+		username
+	}
+}}`
+
 class Tweets extends PureComponent {
-	componentWillMount() {
-		this.loadTweets()
-	}
-
-	componentDidUpdate() {
-		this.loadTweets()
-	}
-
-	loadTweets() {
-		const { dispatch } = this.props
-
-		dispatch(getTweets())
-
-		return fetch(`/api/tweet`, { headers: { 'Content-Type': 'application/json' } })
-			.then(res => res.json())
-			.then(({ tweets }) => tweets.map(tweet => ({
-				...tweet,
-				username: tweet.userId,
-			})))
-			.then(res => dispatch(setTweets(res)))
-			.catch(err => console.error(err))
-	}
+	static propTypes = { data: PropTypes.object };
+	static defaultProps = { data: {} };
 
 	render() {
+		const { data } = this.props
 		return (
 			<div>
-				<TweetList refresh={this.loadTweets.bind(this)} />
+				<TweetList tweets={data.tweets} refresh={() => data.fetchMore(GET_TWEETS)} />
 			</div>
 		)
 	}
 }
 
-export default connect(() => ({}))(stylesLoader.render(Tweets))
+export default graphql(GET_TWEETS)(stylesLoader.render(Tweets))

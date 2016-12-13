@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react'
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 
 // Utilities
 import StylesLoader from 'utilities/styles-loader'
@@ -10,9 +10,14 @@ const stylesLoader = StylesLoader.create()
 class TweetList extends PureComponent {
 	static propTypes = {
 		tweets: PropTypes.arrayOf(PropTypes.shape({
-			username: PropTypes.string,
 			content: PropTypes.string,
-			postDate: PropTypes.string,
+			postTime: PropTypes.shape({
+				time: PropTypes.string,
+				unixTime: PropTypes.string,
+			}),
+			user: PropTypes.shape({
+				username: PropTypes.string,
+			}),
 		})),
 		loading: PropTypes.bool,
 		refresh: PropTypes.func,
@@ -38,14 +43,12 @@ class TweetList extends PureComponent {
 
 				<ul>
 					{tweets.sort((a, b) => (
-						a.postTime === b.postTime ? 0
-						: a.postTime < b.postTime ? 1
-						: -1
-					)).map(({ username, content, postTime }) => (
-						<li key={postTime}>
-							<div>Username: {username}</div>
+						a.postTime.unixTime - b.postTime.unixTime
+					)).map(({ user, content, postTime }) => (
+						<li key={user.username + postTime.unixTime}>
+							<div>Username: {user.username}</div>
 							<div>Content: {content}</div>
-							<div>Posted: {postTime}</div>
+							<div>Posted: {postTime.time}</div>
 						</li>
 					))}
 				</ul>
@@ -54,7 +57,9 @@ class TweetList extends PureComponent {
 	}
 }
 
-export default connect(({ tweet }) => ({
-	tweets: tweet.list,
-	loading: tweet.loading,
-}))(stylesLoader.render(TweetList))
+export default stylesLoader.render(TweetList)
+
+// export default connect(({ tweet }) => ({
+// 	tweets: tweet.list,
+// 	loading: tweet.loading,
+// }))(stylesLoader.render(TweetList))

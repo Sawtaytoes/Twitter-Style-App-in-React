@@ -18,6 +18,7 @@
     "npm": "4.0.3"
   },
   "dependencies": {
+    "apollo-client": "^0.5.19",
     "apollo-server": "^0.3.3",
     "autoprefixer": "^6.5.3",
     "babel-core": "^6.18.2",
@@ -38,6 +39,7 @@
     "file-loader": "^0.9.0",
     "font-awesome": "^4.7.0",
     "graphql-server-express": "^0.4.3",
+    "graphql-tag": "^1.1.2",
     "graphql-tools": "^0.8.3",
     "happypack": "^2.2.1",
     "helmet": "^2.3.0",
@@ -48,6 +50,7 @@
     "normalize.css": "^4.2.0",
     "postcss-loader": "^0.9.1",
     "react": "^15.4.1",
+    "react-apollo": "^0.7.1",
     "react-dom": "^15.4.1",
     "react-fastclick": "^2.1.2",
     "react-g-analytics": "^0.2.6",
