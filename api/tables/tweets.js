@@ -21,12 +21,12 @@ const Tweets = () => {
 
 	// Table Overrides
 	const getAllByUserId = userId => (
-		table.getAllByKeyValue(schema.userId, Number(userId))
+		table.getAllByKeyValue(schema.userId, userId)
 	)
 
 	const add = entry => {
 		const newEntry = Object.assign({}, entry, {
-			[schema.userId]: Number(entry.userId),
+			[schema.userId]: entry.userId,
 		})
 
 		return table.add(newEntry)
