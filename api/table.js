@@ -36,7 +36,6 @@ const Table = (name = '', props = {}) => {
 		if (a.includes && b.includes) {
 			const aLower = a.toLowerCase()
 			const bLower = b.toLowerCase()
-			console.log('lower', aLower, bLower);
 			return aLower.includes(bLower) || bLower.includes(aLower) || aLower === bLower
 		}
 
