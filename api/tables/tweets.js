@@ -45,6 +45,7 @@ const Tweets = () => {
 		delete: table.delete,
 		get: table.get,
 		getAll: table.getAll,
+		getAllFuzzy: table.getAllFuzzy,
 		remove: table.remove,
 		update: table.update,
 	})

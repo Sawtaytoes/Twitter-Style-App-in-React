@@ -21,30 +21,56 @@ const Table = (name = '', props = {}) => {
 		return id
 	}
 
+	const allEntries = () => Array.from(data.values())
+
+	const filterByValues = (looper, checkMatch, lookupParams = {}) => {
+		const keys = Object.keys(lookupParams).filter(key => lookupParams[key] !== undefined)
+
+		return looper.call(allEntries(), entry => (
+			keys.every(key => checkMatch(entry[key], lookupParams[key]))
+		))
+	}
+
+	const exactMatch = (a, b) => a === b
+	const fuzzyMatch = (a, b) => {
+		if (a.includes && b.includes) {
+			const aLower = a.toLowerCase()
+			const bLower = b.toLowerCase()
+			console.log('lower', aLower, bLower);
+			return aLower.includes(bLower) || bLower.includes(aLower) || aLower === bLower
+		}
+
+		return exactMatch(a, b)
+	}
+
+	const getByManyValues = lookupParams => (
+		filterByValues(Array.prototype.find, exactMatch, lookupParams)
+	)
+	const getAllByManyValues = lookupParams => (
+		filterByValues(Array.prototype.filter, exactMatch, lookupParams)
+	)
+	const getAllByManyValuesFuzzy = lookupParams => (
+		filterByValues(Array.prototype.filter, fuzzyMatch, lookupParams)
+	)
+
 	// Public
-	const get = id => data.get(Number(id))
-	const getAll = () => Array.from(data.values())
-
-	const getByManyValues = lookupParams => {
-		const keys = Object.keys(lookupParams)
-
-		return getAll().find(entry => (
-			keys.every(key => entry[key] === lookupParams[key])
-		))
-	}
 	const getByKeyValue = (key, value) => getByManyValues({ [key]: value })
-
-	const getAllByManyValues = lookupParams => {
-		const keys = Object.keys(lookupParams)
-
-		return getAll().filter(entry => (
-			keys.every(key => entry[key] === lookupParams[key])
-		))
-	}
 	const getAllByKeyValue = (key, value) => getAllByManyValues({ [key]: value })
+	const getAllByKeyValueFuzzy = (key, value) => getAllByManyValues({ [key]: value })
 
-	const update = (itemId, entry) => {
-		const id = Number(itemId)
+	const get = lookupParams => {
+		if (typeof lookupParams === 'object') {
+			return getByManyValues(lookupParams)
+		}
+
+		const id = lookupParams
+		return data.get(id)
+	}
+
+	const getAll = lookupParams => getAllByManyValues(lookupParams)
+	const getAllFuzzy = lookupParams => getAllByManyValuesFuzzy(lookupParams)
+
+	const update = (id, entry) => {
 		const currentEntry = get(id) || {}
 		const newEntry = {}
 
@@ -87,10 +113,10 @@ const Table = (name = '', props = {}) => {
 		add,
 		get,
 		getAll,
-		getAllByKeyValue,
-		getAllByManyValues,
+		getAllFuzzy,
 		getByKeyValue,
-		getByManyValues,
+		getAllByKeyValue,
+		getAllByKeyValueFuzzy,
 		remove,
 		removeAll,
 		schema,
