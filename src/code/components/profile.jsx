@@ -36,29 +36,33 @@ mutation AddUserTweet($input: AddTweetInput!) {
 	}
 }`
 
+const MutationTweetEditor = graphql(GET_USER_TWEETS)(graphql(ADD_TWEET)(TweetEditor))
+const QueryTweetList = graphql(GET_USER_TWEETS, {
+	props: ({ _, data: { loading, user, refetch } }) => ({
+		tweets: user && user.tweets,
+		loading: loading,
+		refetch: refetch,
+	})
+})(TweetList)
+
 class Profile extends PureComponent {
 	static propTypes = {
 		userId: PropTypes.number.isRequired,
 		username: PropTypes.string.isRequired,
-		mutate: PropTypes.func.isRequired,
 	};
 
 	// static defaultProps = {};
 
 	render() {
-		const { userId, username, data, mutate } = this.props
+		const { userId, username } = this.props
 		return (
 			<div>
 				<h1>Profile</h1>
 				<p>UserId: {userId}</p>
 				<p>Username: {username}</p>
-				<button onClick={() => mutate({ variables: { input: { userId, content: 'TEST' } }})}>TEST</button>
 
-				<TweetEditor
-					add={input => mutate({ variables: { input }})}
-					refresh={() => data.fetchMore(GET_USER_TWEETS)}
-				/>
-				<TweetList tweets={data.user && data.user.tweets} refresh={() => data.fetchMore(GET_USER_TWEETS)} />
+				<MutationTweetEditor />
+				<QueryTweetList />
 			</div>
 		)
 	}
@@ -67,4 +71,4 @@ class Profile extends PureComponent {
 export default connect(({ account }) => ({
 	userId: account.userId,
 	username: account.username,
-}))(graphql(GET_USER_TWEETS)(graphql(ADD_TWEET)(stylesLoader.render(Profile))))
+}))(stylesLoader.render(Profile))

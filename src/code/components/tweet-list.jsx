@@ -20,17 +20,19 @@ class TweetList extends PureComponent {
 			}),
 		})),
 		loading: PropTypes.bool,
-		refresh: PropTypes.func,
+		refetch: PropTypes.func,
 	};
 
 	static defaultProps = {
 		tweets: [],
 		loading: false,
-		refresh: () => {},
+		refetch: () => {},
 	};
 
 	render() {
-		const { tweets, loading, refresh } = this.props
+		const { tweets, loading, refetch } = this.props
+		console.debug('loading', loading)
+
 		return (
 			<div>
 				{tweets && <h2>Tweets
@@ -39,11 +41,11 @@ class TweetList extends PureComponent {
 					</span></span>}
 				</h2>}
 
-				<button onClick={refresh}>Refresh</button>
+				<button onClick={() => refetch()}>Refresh</button>
 
 				<ul>
 					{tweets.sort((a, b) => (
-						a.postTime.unixTime - b.postTime.unixTime
+						b.postTime.unixTime - a.postTime.unixTime
 					)).map(({ user, content, postTime }) => (
 						<li key={user.username + postTime.unixTime}>
 							<div>Username: {user.username}</div>

@@ -9,13 +9,17 @@ const stylesLoader = StylesLoader.create()
 
 class TweetEditor extends PureComponent {
 	static propTypes = {
-		userId: PropTypes.number.isRequired,
-		add: PropTypes.func.isRequired,
-		refresh: PropTypes.func,
+		data: PropTypes.object,
+		query: PropTypes.object,
+		mutate: PropTypes.func,
+		// userId: PropTypes.number.isRequired,
+		// add: PropTypes.func.isRequired,
+		// refresh: PropTypes.func,
 	};
 
 	static defaultProps = {
-		refresh: () => {},
+		// refresh: () => {},
+		query: {},
 	};
 
 	constructor() {
@@ -24,11 +28,11 @@ class TweetEditor extends PureComponent {
 	}
 
 	handleSubmission() {
-		const { userId, add, refresh } = this.props
+		const { data, mutate, userId } = this.props
 		const { content } = this.fields
 
-		return add({ userId, content })
-			.then(() => refresh())
+		return mutate({ variables: { input: { userId, content }}})
+			.then(() => data.refetch())
 			.catch(err => console.error(err))
 	}
 

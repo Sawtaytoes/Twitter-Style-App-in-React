@@ -1,4 +1,4 @@
-import React, { PureComponent, PropTypes } from 'react'
+import React, { PureComponent } from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -25,18 +25,21 @@ query GetTweets {
 	}
 }`
 
-class Tweets extends PureComponent {
-	static propTypes = { data: PropTypes.object };
-	static defaultProps = { data: {} };
+const QueryTweetList = graphql(GET_TWEETS, {
+	props: ({ _, data: { loading, tweets, refetch } }) => ({
+		tweets: tweets,
+		loading: loading,
+		refetch: refetch,
+	})
+})(TweetList)
 
-	render() {
-		const { data } = this.props
-		return (
-			<div>
-				<TweetList tweets={data.tweets} refresh={() => data.fetchMore(GET_TWEETS)} />
-			</div>
-		)
-	}
+class Tweets extends PureComponent {
+	render() { return (
+		<div>
+			{/*<TweetList tweets={data.tweets} refresh={() => data.fetchMore(GET_TWEETS)} />*/}
+			<QueryTweetList />
+		</div>
+	)}
 }
 
-export default graphql(GET_TWEETS)(stylesLoader.render(Tweets))
+export default stylesLoader.render(Tweets)
