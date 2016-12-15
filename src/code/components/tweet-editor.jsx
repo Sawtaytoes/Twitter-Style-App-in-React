@@ -10,6 +10,7 @@ const stylesLoader = StylesLoader.create()
 class TweetEditor extends PureComponent {
 	static propTypes = {
 		userId: PropTypes.number.isRequired,
+		add: PropTypes.func.isRequired,
 		refresh: PropTypes.func,
 	};
 
@@ -23,15 +24,10 @@ class TweetEditor extends PureComponent {
 	}
 
 	handleSubmission() {
-		const { userId, refresh } = this.props
-		const body = JSON.stringify(this.fields)
+		const { userId, add, refresh } = this.props
+		const { content } = this.fields
 
-		return fetch(`/api/user/${userId}/tweet`, {
-				body,
-				headers: { 'Content-Type': 'application/json' },
-				method: 'POST',
-			})
-			.then(res => res.json())
+		return add({ userId, content })
 			.then(() => refresh())
 			.catch(err => console.error(err))
 	}

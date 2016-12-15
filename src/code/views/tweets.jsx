@@ -11,17 +11,19 @@ import StylesLoader from 'utilities/styles-loader'
 // Styles
 const stylesLoader = StylesLoader.create()
 
-const GET_TWEETS = gql`query {
-tweets {
-	content
-	postTime {
-		time
-		unixTime
+const GET_TWEETS = gql`
+query GetTweets {
+	tweets {
+		content
+		postTime {
+			time
+			unixTime
+		}
+		user {
+			username
+		}
 	}
-	user {
-		username
-	}
-}}`
+}`
 
 class Tweets extends PureComponent {
 	static propTypes = { data: PropTypes.object };
