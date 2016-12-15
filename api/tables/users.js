@@ -13,7 +13,7 @@ const Users = () => {
 	// Setup Table
 	const schema = table.schema
 	const sampleEntry = () => ({
-		[schema.userId]: 0,
+		[schema.userId]: 1,
 		[schema.displayName]: 'Sam Pull',
 		[schema.username]: 'sample',
 		[schema.password]: 'pass',

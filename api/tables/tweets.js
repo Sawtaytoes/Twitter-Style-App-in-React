@@ -12,7 +12,7 @@ const Tweets = () => {
 	// Setup Table
 	const schema = table.schema
 	const sampleEntry = () => ({
-		[schema.userId]: 0,
+		[schema.userId]: 1,
 		[schema.content]: 'I love the pies!',
 		[schema.postTime]: new Date('11/13/2016'),
 	})
