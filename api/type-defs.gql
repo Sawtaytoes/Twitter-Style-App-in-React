@@ -1,3 +1,4 @@
+# Basic User Info including associated Tweets
 type User {
 	joinTime: DateTime
 	tweets(content: String): [Tweet]!
@@ -5,6 +6,7 @@ type User {
 	username: String
 }
 
+# A single Tweet including a link back to User
 type Tweet {
 	content: String
 	postTime: DateTime
@@ -13,11 +15,13 @@ type Tweet {
 	userId: Int
 }
 
+# Custom type for extending JS dates to include string and Unix variants
 type DateTime {
 	time: String
 	unixTime: String
 }
 
+# Get Tweets and Users
 type Query {
 	tweet(tweetId: Int): Tweet
 	tweets(userId: Int, content: String): [Tweet]!
@@ -25,7 +29,39 @@ type Query {
 	users(username: String): [User]!
 }
 
+# Add, Edit, and Remove Tweets and Users
+type Mutation {
+	addTweet(input: AddTweetInput!): Tweet
+	updateTweet(input: UpdateTweetInput!): Tweet
+	addUser(input: AddUserInput!): User
+	updateUser(input: UpdateUserInput!): User
+}
+
+# Add User
+input AddUserInput {
+	username: String!,
+	password: String!,
+}
+
+# Update User
+input UpdateUserInput {
+	userId: Int!,
+	displayName: String!,
+}
+
+# Add Tweet
+input AddTweetInput {
+	userId: Int!,
+	content: String!,
+}
+
+# Update Tweet
+input UpdateTweetInput {
+	tweetId: Int!,
+	content: String!,
+}
+
 schema {
 	query: Query
-	# mutation: Mutation
+	mutation: Mutation
 }
