@@ -52,10 +52,10 @@ class Profile extends PureComponent {
 				<h1>Profile</h1>
 				<p>UserId: {userId}</p>
 				<p>Username: {username}</p>
-				<button onClick={() => mutate.call(this, { variables: { input: { userId, content: 'TEST' } }})}>TEST</button>
+				<button onClick={() => mutate({ variables: { input: { userId, content: 'TEST' } }})}>TEST</button>
 
 				<TweetEditor
-					add={input => mutate.call(this, { variables: { input }})}
+					add={input => mutate({ variables: { input }})}
 					refresh={() => data.fetchMore(GET_USER_TWEETS)}
 				/>
 				<TweetList tweets={data.user && data.user.tweets} refresh={() => data.fetchMore(GET_USER_TWEETS)} />
