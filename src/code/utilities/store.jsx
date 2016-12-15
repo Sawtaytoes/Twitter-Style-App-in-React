@@ -2,13 +2,17 @@ import { compose, applyMiddleware, createStore } from 'redux'
 import { syncHistoryWithStore } from 'react-router-redux'
 import createBrowserHistory from 'history/lib/createBrowserHistory'
 
+// Utilities
 import rootReducer from 'reducers'
+import { client } from 'utilities/apollo-client'
 import { getInitialState } from 'utilities/initial-state'
 
 const initialState = getInitialState()
 const history = createBrowserHistory()
 
-let middlewares = []
+const middlewares = [
+	client.middleware(),
+]
 
 const store = compose(applyMiddleware(...middlewares))(
 	window.devToolsExtension ? window.devToolsExtension()(createStore) : createStore
