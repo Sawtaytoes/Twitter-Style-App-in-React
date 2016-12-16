@@ -6,8 +6,7 @@
     "web"
   ],
   "watch": [
-    "includes/*.js",
-    "services/*.js",
-    "webpack/*.js"
+    "api/*.js",
+    "api/type-defs.gql"
   ]
 }

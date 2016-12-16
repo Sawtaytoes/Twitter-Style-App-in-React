@@ -6,12 +6,14 @@
     ]
   },
   "scripts": {
-    "prestart": "npm install",
-    "start": "node index.js",
     "api": "node api.js",
     "api-debug": "node --inspect --debug-brk api.js",
-    "api-mon": "nodemon api.js",
-    "api-test": "tape-watch api.test.js -p tap-spec"
+    "api-mon": "nodemon --config nodemon-api.json api.js",
+    "api-test": "tape-watch api.test.js -p tap-spec",
+    "prestart": "npm install",
+    "start": "node index.js",
+    "web": "node index.js",
+    "web-mon": "nodemon --config nodemon.json index.js"
   },
   "engines": {
     "node": "7.2.0",
