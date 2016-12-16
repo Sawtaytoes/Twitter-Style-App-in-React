@@ -26,7 +26,7 @@ query GetTweets {
 }`
 
 const QueryTweetList = graphql(GET_TWEETS, {
-	props: ({ _, data: { loading, tweets, refetch } }) => ({
+	props: ({ data: { loading, tweets, refetch } }) => ({
 		tweets: tweets,
 		loading: loading,
 		refetch: refetch,
