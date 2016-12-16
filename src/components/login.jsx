@@ -2,7 +2,7 @@ import React, { PureComponent, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
 // Actions
-import { setLoading, setLoaded } from 'ducks/account'
+import { login, loginErr } from 'ducks/account'
 
 // Utilities
 import StylesLoader from 'utilities/styles-loader'
@@ -13,11 +13,11 @@ const stylesLoader = StylesLoader.create()
 class Login extends PureComponent {
 	static propTypes = {
 		title: PropTypes.string,
-		action: PropTypes.func.isRequired,
 	};
 
 	static defaultProps = {
 		title: '',
+		loading: false,
 	};
 
 	constructor() {
@@ -26,14 +26,22 @@ class Login extends PureComponent {
 	}
 
 	handleSubmission() {
-		const { dispatch, submit, action, loading } = this.props
+		const { dispatch, mutate, loading } = this.props
 		if (loading) { return }
 
-		dispatch(setLoading())
+		// dispatch(setLoading())
 
-		submit(this.fields)
-		.then(json => dispatch(action(json, this.fields)))
-		.then(() => dispatch(setLoaded()))
+		// submit(this.fields)
+		// .then(json => dispatch(action(json, this.fields)))
+		// .then(() => dispatch(setLoaded()))
+
+		mutate({ variables: { input: this.fields }})
+			// .then(({ data }) => { console.debug('data', data); return data })
+			// .then(({ user }) => { console.debug('user', user); return user })
+			// .then(user => dispatch(login(user)))
+			.then(({ data: { user } }) => dispatch(login(user)))
+			// .catch(err => { console.error(err); return Promise.reject(err) })
+			.catch(err => dispatch(loginErr(err)))
 	}
 
 	handleInputChanged(fieldName) {
@@ -71,8 +79,8 @@ class Login extends PureComponent {
 	}
 }
 
-export default connect(({ account }) => ({
-	error: account.error,
-	loading: account.loading,
-	message: account.message,
+export default connect(({ account: { error, message } }) => ({
+	error,
+	message,
+	// loading: account.loading,
 }))(stylesLoader.render(Login))

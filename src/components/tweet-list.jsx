@@ -32,7 +32,6 @@ class TweetList extends PureComponent {
 
 	render() {
 		const { tweets, loading, refetch } = this.props
-		console.debug('loading', loading)
 
 		return (
 			<div>

@@ -10,15 +10,12 @@ const stylesLoader = StylesLoader.create()
 class TweetEditor extends PureComponent {
 	static propTypes = {
 		data: PropTypes.object,
-		query: PropTypes.object,
 		mutate: PropTypes.func,
-		// userId: PropTypes.number.isRequired,
-		// add: PropTypes.func.isRequired,
-		// refresh: PropTypes.func,
+		query: PropTypes.object,
+		userId: PropTypes.number.isRequired,
 	};
 
 	static defaultProps = {
-		// refresh: () => {},
 		query: {},
 	};
 
@@ -39,6 +36,7 @@ class TweetEditor extends PureComponent {
 	handleKeyDown(e) {
 		const keyCode = e.keyCode || e.which
 		if (e.key === 'Enter' || keyCode === 13) {
+			e.preventDefault()
 			this.handleSubmission()
 		}
 	}

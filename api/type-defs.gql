@@ -34,7 +34,14 @@ type Mutation {
 	addTweet(input: AddTweetInput!): Tweet
 	updateTweet(input: UpdateTweetInput!): Tweet
 	addUser(input: AddUserInput!): User
+	loginUser(input: LoginUserInput!): User
 	updateUser(input: UpdateUserInput!): User
+}
+
+# Login User
+input LoginUserInput {
+	username: String!,
+	password: String!,
 }
 
 # Add User

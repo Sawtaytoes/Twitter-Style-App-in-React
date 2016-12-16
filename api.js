@@ -4,7 +4,6 @@ global.baseDir = `${__dirname}/`
 // Load Config settings
 const dir = require(`${global.baseDir}/global-dirs`)
 const config = require(`${dir.includes}config-settings`)
-const login = require(`${dir.middleware}login`)
 const { typeDefs, resolvers } = require(`${dir.api}graphql-schema`)
 
 
@@ -44,15 +43,6 @@ app
 }))
 
 .disable('x-powered-by')
-
-
-// --------------------------------------------------------
-// Login
-// --------------------------------------------------------
-
-.post('/login', ({ body }, res) => res.send(
-	login.getUserId(body.username, body.password)
-))
 
 
 // --------------------------------------------------------
