@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { redirs, routes } from 'content/route-config'
 
 // Components
-import Master from 'layouts/master'
+import SiteLayout from 'layouts/site-layout'
 
 // Actions
 import { changeLocation } from 'ducks/location'
@@ -86,9 +86,9 @@ export default class Routes extends PureComponent {
 	}
 
 	render() { return (
-		<Master>
+		<SiteLayout>
 			{this.renderRoutes()}
 			{this.renderRedirs()}
-		</Master>
+		</SiteLayout>
 	)}
 }

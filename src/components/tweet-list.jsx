@@ -6,6 +6,7 @@ import StylesLoader from 'utilities/styles-loader'
 
 // Styles
 const stylesLoader = StylesLoader.create()
+stylesLoader.add(require('components/tweet-list.styl'))
 
 class TweetList extends PureComponent {
 	static propTypes = {

@@ -6,13 +6,12 @@ const webpack = require('webpack')
 const dir = require(`${global.baseDir}/global-dirs`)
 const config = require(`${dir.includes}config-settings`)
 const paths = require(`${dir.includes}paths`)
-const serverRunMode = require(`${dir.includes}server-run-mode`)
 const webpackDefaultConfig = require(`${dir.webpack}webpack.config.default`)
 
 const threadPool = HappyPack.ThreadPool({ size: 2 })
 
 const webpackConfig = {
-	entry: { main: `./${paths.code.src}client` },
+	entry: { main: `./${paths.root.src}client` },
 	output: {
 		filename: '[name].bundle.js',
 		chunkFilename: '[id].bundle.js',
