@@ -14,8 +14,8 @@ import StylesLoader from 'utilities/styles-loader'
 const stylesLoader = StylesLoader.create()
 
 const GET_USER_TWEETS = gql`
-query GetUserTweets {
-	user(userId: 1) {
+query GetUserTweets($userId: Int!) {
+	user(userId: $userId) {
 		tweets {
 			content
 			postTime {
@@ -36,13 +36,17 @@ mutation AddUserTweet($input: AddTweetInput!) {
 	}
 }`
 
-const MutationTweetEditor = graphql(GET_USER_TWEETS)(graphql(ADD_TWEET)(TweetEditor))
+const MutationTweetEditor = graphql(GET_USER_TWEETS, {
+	options: ({ userId }) => ({ variables: { userId } }),
+})(graphql(ADD_TWEET)(TweetEditor))
+
 const QueryTweetList = graphql(GET_USER_TWEETS, {
-	props: ({ _, data: { loading, user, refetch } }) => ({
+	options: ({ userId }) => ({ variables: { userId } }),
+	props: ({ data: { loading, user, refetch } }) => ({
+		loading,
 		tweets: user && user.tweets,
-		loading: loading,
 		refetch: refetch,
-	})
+	}),
 })(TweetList)
 
 class Profile extends PureComponent {
@@ -61,14 +65,14 @@ class Profile extends PureComponent {
 				<p>UserId: {userId}</p>
 				<p>Username: {username}</p>
 
-				<MutationTweetEditor />
-				<QueryTweetList />
+				<MutationTweetEditor userId={userId} />
+				<QueryTweetList userId={userId} />
 			</div>
 		)
 	}
 }
 
-export default connect(({ account }) => ({
-	userId: account.userId,
-	username: account.username,
+export default connect(({ account: { userId, username } }) => ({
+	userId,
+	username,
 }))(stylesLoader.render(Profile))
