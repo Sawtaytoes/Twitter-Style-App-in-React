@@ -39,7 +39,6 @@ const UserSignUp = graphql(ADD_USER)(Login)
 class Home extends PureComponent {
 	render() {
 		const { isAuthenticated } = this.props
-		console.debug('isAuthenticated', isAuthenticated)
 		return (
 			<div>
 				<h1>Welcome!</h1>
