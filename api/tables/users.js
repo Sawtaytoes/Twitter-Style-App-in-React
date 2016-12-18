@@ -13,7 +13,7 @@ const Users = () => {
 	// Setup Table
 	const schema = table.schema
 	const sampleEntry = () => ({
-		[schema.userId]: 0,
+		[schema.userId]: 1,
 		[schema.displayName]: 'Sam Pull',
 		[schema.username]: 'sample',
 		[schema.password]: 'pass',
@@ -31,7 +31,7 @@ const Users = () => {
 	)
 
 	const getByUsernamePassword = (username, password) => (
-		table.getByManyValues({
+		table.get({
 			[schema.username]: formatUsername(username),
 			[schema.password]: password,
 		})
@@ -62,6 +62,7 @@ const Users = () => {
 		delete: table.delete,
 		get: table.get,
 		getAll: table.getAll,
+		getAllFuzzy: table.getAllFuzzy,
 		remove: table.remove,
 		update: table.update,
 	})

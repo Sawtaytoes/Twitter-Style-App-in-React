@@ -4,7 +4,7 @@ const Enum = require(`${dir.api}enum`)
 const Table = (name = '', props = {}) => {
 	const data = new Map()
 	const primaryKey = `${name}Id`
-	let nextId = 0
+	let nextId = 1
 	let schema = {}
 
 	// Setup Schema
@@ -21,56 +21,77 @@ const Table = (name = '', props = {}) => {
 		return id
 	}
 
+	const allEntries = () => Array.from(data.values())
+
+	const filterByValues = (looper, checkMatch, lookupParams = {}) => {
+		const keys = Object.keys(lookupParams).filter(key => lookupParams[key] !== undefined)
+
+		return looper.call(allEntries(), entry => (
+			keys.every(key => checkMatch(entry[key], lookupParams[key]))
+		))
+	}
+
+	const exactMatch = (a, b) => a === b
+	const fuzzyMatch = (a, b) => {
+		if (a.includes && b.includes) {
+			const aLower = a.toLowerCase()
+			const bLower = b.toLowerCase()
+			return aLower.includes(bLower) || bLower.includes(aLower) || aLower === bLower
+		}
+
+		return exactMatch(a, b)
+	}
+
+	const getByManyValues = lookupParams => (
+		filterByValues(Array.prototype.find, exactMatch, lookupParams)
+	)
+	const getAllByManyValues = lookupParams => (
+		filterByValues(Array.prototype.filter, exactMatch, lookupParams)
+	)
+	const getAllByManyValuesFuzzy = lookupParams => (
+		filterByValues(Array.prototype.filter, fuzzyMatch, lookupParams)
+	)
+
 	// Public
-	const get = id => data.get(Number(id))
-	const getAll = () => Array.from(data.values())
-
-	const getByManyValues = lookupParams => {
-		const keys = Object.keys(lookupParams)
-
-		return getAll().find(entry => (
-			keys.every(key => entry[key] === lookupParams[key])
-		))
-	}
 	const getByKeyValue = (key, value) => getByManyValues({ [key]: value })
-
-	const getAllByManyValues = lookupParams => {
-		const keys = Object.keys(lookupParams)
-
-		// console.log('filtered', getAll().filter(entry => {
-		// 	return keys.every(key => {
-		// 		console.log('key', key)
-		// 		console.log('entry[key]', entry[key])
-		// 		console.log('lookupParams[key]', lookupParams[key])
-		// 		return entry[key] === lookupParams[key]
-		// 	})
-		// }));
-		return getAll().filter(entry => (
-			keys.every(key => entry[key] === lookupParams[key])
-		))
-	}
 	const getAllByKeyValue = (key, value) => getAllByManyValues({ [key]: value })
+	const getAllByKeyValueFuzzy = (key, value) => getAllByManyValues({ [key]: value })
 
-	const update = (itemId, entry) => {
-		const id = Number(itemId)
+	const get = lookupParams => {
+		if (typeof lookupParams === 'object') {
+			return getByManyValues(lookupParams)
+		}
+
+		const id = lookupParams
+		return data.get(id)
+	}
+
+	const getAll = lookupParams => getAllByManyValues(lookupParams)
+	const getAllFuzzy = lookupParams => getAllByManyValuesFuzzy(lookupParams)
+
+	const update = (id, entry) => {
 		const currentEntry = get(id) || {}
 		const newEntry = {}
 
 		Object.keys(schema).forEach(key => {
-			const entryValue = entry[key]
-			const currentValue = currentEntry[key]
-			let value
+			const value = (key === primaryKey) && id
+				|| entry[key]
+				|| currentEntry[key]
+				|| schema[key].default()
+			// const entryValue = entry[key]
+			// const currentValue = currentEntry[key]
+			// let value
 
-			// HACK: Make 0 truthy
-			if (key === primaryKey && (id || id === 0)) {
-				value = id == 0 ? 0 : id
-			} else if (entryValue || entryValue === 0) {
-				value = entryValue == 0 ? 0 : entryValue
-			} else if (currentValue || currentValue === 0) {
-				value = currentValue == 0 ? 0 : currentValue
-			} else {
-				value = schema[key].default()
-			}
+			// // HACK: Make 0 truthy
+			// if (key === primaryKey && (id || id === 0)) {
+			// 	value = id == 0 ? 0 : id
+			// } else if (entryValue || entryValue === 0) {
+			// 	value = entryValue == 0 ? 0 : entryValue
+			// } else if (currentValue || currentValue === 0) {
+			// 	value = currentValue == 0 ? 0 : currentValue
+			// } else {
+			// 	value = schema[key].default()
+			// }
 
 			newEntry[key] = value
 		})
@@ -95,10 +116,10 @@ const Table = (name = '', props = {}) => {
 		add,
 		get,
 		getAll,
-		getAllByKeyValue,
-		getAllByManyValues,
+		getAllFuzzy,
 		getByKeyValue,
-		getByManyValues,
+		getAllByKeyValue,
+		getAllByKeyValueFuzzy,
 		remove,
 		removeAll,
 		schema,

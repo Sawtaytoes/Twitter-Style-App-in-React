@@ -1,0 +1,12 @@
+{
+  "ignore": [
+    ".git",
+    ".happypack",
+    "node_modules",
+    "web"
+  ],
+  "watch": [
+    "api/*.js",
+    "api/type-defs.gql"
+  ]
+}

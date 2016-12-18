@@ -12,7 +12,7 @@ const Tweets = () => {
 	// Setup Table
 	const schema = table.schema
 	const sampleEntry = () => ({
-		[schema.userId]: 0,
+		[schema.userId]: 1,
 		[schema.content]: 'I love the pies!',
 		[schema.postTime]: new Date('11/13/2016'),
 	})
@@ -21,12 +21,12 @@ const Tweets = () => {
 
 	// Table Overrides
 	const getAllByUserId = userId => (
-		table.getAllByKeyValue(schema.userId, Number(userId))
+		table.getAllByKeyValue(schema.userId, userId)
 	)
 
 	const add = entry => {
 		const newEntry = Object.assign({}, entry, {
-			[schema.userId]: Number(entry.userId),
+			[schema.userId]: entry.userId,
 		})
 
 		return table.add(newEntry)
@@ -45,6 +45,7 @@ const Tweets = () => {
 		delete: table.delete,
 		get: table.get,
 		getAll: table.getAll,
+		getAllFuzzy: table.getAllFuzzy,
 		remove: table.remove,
 		update: table.update,
 	})
