@@ -7,7 +7,7 @@ const proxy = require('express-http-proxy')
 
 // Configs
 const dir = require(`${global.baseDir}/global-dirs`)
-const config = require(`${dir.includes}config-settings`)
+const config = require(`${dir.configs}config-settings`)
 const paths = require(`${dir.includes}paths`)
 const serverRunMode = require(`${dir.includes}server-run-mode`)
 

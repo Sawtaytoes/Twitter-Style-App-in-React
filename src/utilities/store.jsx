@@ -1,6 +1,6 @@
 import { compose, applyMiddleware, createStore } from 'redux'
 import { syncHistoryWithStore } from 'react-router-redux'
-import createBrowserHistory from 'history/lib/createBrowserHistory'
+import createBrowserHistory from 'history/createBrowserHistory'
 
 // Utilities
 import rootReducer from 'reducers'
