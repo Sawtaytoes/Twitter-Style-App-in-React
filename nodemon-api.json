@@ -6,6 +6,7 @@
     "web"
   ],
   "watch": [
+    "api.js",
     "api/*.js",
     "api/type-defs.gql"
   ]

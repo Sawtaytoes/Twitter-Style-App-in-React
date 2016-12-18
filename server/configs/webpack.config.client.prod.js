@@ -19,6 +19,7 @@ const webpackConfig = {
 			'react',
 			'fbjs/lib/ExecutionEnvironment',
 			'redux',
+			'react-apollo',
 			'react-dom',
 			'react-dom/server',
 			'react-fastclick',
