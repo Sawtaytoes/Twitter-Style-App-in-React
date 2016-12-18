@@ -11,7 +11,7 @@ global.baseDir = `${__dirname}/`
 
 // Load Config settings
 const dir = require(`${global.baseDir}/global-dirs`)
-const config = require(`${dir.includes}config-settings`)
+const config = require(`${dir.configs}config-settings`)
 
 // --------------------------------------------------------
 // Globals
