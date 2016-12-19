@@ -46,7 +46,7 @@ export const getInitialState = () => ({
 	numFailed: 0,
 })
 
-const Enum = () => ({})
+const Enum = () => Object.freeze({})
 export const TAP_MESSAGE_TYPE = {
 	HEADER: Enum(),
 	PASS: Enum(),
