@@ -46,7 +46,7 @@ export const getInitialState = () => ({
 	numFailed: 0,
 })
 
-const Enum = () => ({})
+const Enum = () => Object.freeze({})
 export const TAP_MESSAGE_TYPE = {
 	HEADER: Enum(),
 	PASS: Enum(),
@@ -59,8 +59,8 @@ export const TAP_COLOR = {
 	PASS: 'green',
 }
 
-const isInString = (string, critiera) => (
-	string.search(new RegExp(`^(${critiera})`)) === 0
+const isInString = (string, criteria) => (
+	string.search(new RegExp(`^(${criteria})`)) === 0
 )
 
 const getTestInfo = string => {

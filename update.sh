@@ -12,4 +12,4 @@ npm prune
 npm install
 coffee index.coffee compile
 chown -R www-data:www-data .
-pm2 gracefulReload ${PWD##*/}
+pm2 reload ${PWD##*/}
