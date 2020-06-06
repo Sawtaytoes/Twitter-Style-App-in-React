@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "apollo-client": "^0.5.19",
-    "apollo-server": "^0.3.3",
+    "apollo-server": "^2.14.2",
     "autoprefixer": "^6.5.4",
     "babel-core": "^6.21.0",
     "babel-loader": "^6.2.10",
